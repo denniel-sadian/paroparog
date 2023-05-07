@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  
+  nginx:
+    build: ./nginx
+    depends_on:
+      - app
+    ports:
+      - 777:80
+    volumes:
+      - ./logs/nginx:/var/log/nginx
+      - ./app:/var/www
+  
+  app:
+    build: ./app
+    depends_on:
+      - database
+    ports:
+      - 9000:9000
+    volumes:
+      - ./app:/var/www
+    working_dir: /var/www
+  
+  database:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+    ports:
+      - 3306:3306
+    volumes:
+      - paroparogdb:/var/lib/mysql
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - database
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8085:80
+
+volumes:
+  paroparogdb:
