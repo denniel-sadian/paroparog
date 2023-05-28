@@ -18,9 +18,14 @@ services:
       - database
     ports:
       - 9000:9000
+    env_file:
+      - .env
     volumes:
-      - ./app:/var/www
-    working_dir: /var/www
+      - ./app/media:/var/www/media
+      - ./app/scripts:/var/www/scripts
+      - ./app/templates:/var/www/templates
+      - ./app/index.php:/var/www/index.php
+      - ./app/twig.php:/var/www/twig.php
   
   database:
     image: mysql
