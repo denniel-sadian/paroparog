@@ -22,7 +22,7 @@ services:
       - .env
     volumes:
       - ./app/media:/var/www/media
-      - ./app/scripts:/var/www/scripts
+      - ./app/utilities:/var/www/utilities
       - ./app/templates:/var/www/templates
       - ./app/index.php:/var/www/index.php
       - ./app/twig.php:/var/www/twig.php
