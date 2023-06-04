@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 
 {% block title %}
-	My Page Title
+	{{ title }}
 {% endblock %}
 
 {% block content %}
-	<p>Welcome to my web page!</p>
+	<ul>
+		{% for i in message %}
+		<li>{{ i.specie_type }}</li>
+		{% endfor %}
+	</ul>
 {% endblock %}
