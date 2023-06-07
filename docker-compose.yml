@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  
+
   nginx:
     build: ./nginx
     depends_on:
@@ -11,7 +11,7 @@ services:
     volumes:
       - ./logs/nginx:/var/log/nginx
       - ./app:/var/www
-  
+
   app:
     build: ./app
     depends_on:
@@ -26,7 +26,7 @@ services:
       - ./app/templates:/var/www/templates
       - ./app/index.php:/var/www/index.php
       - ./app/twig.php:/var/www/twig.php
-  
+
   database:
     image: mysql
     environment:
@@ -38,7 +38,7 @@ services:
       - 3306:3306
     volumes:
       - paroparogdb:/var/lib/mysql
-  
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     depends_on:
@@ -50,6 +50,12 @@ services:
     restart: always
     ports:
       - 8085:80
+
+  mailhog:
+    image: jcalonso/mailhog
+    ports:
+      - 1026:1025
+      - 8026:8025
 
 volumes:
   paroparogdb:
