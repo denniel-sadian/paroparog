@@ -16,6 +16,8 @@ RUN apt-get update \
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
   && docker-php-ext-install pdo pdo_mysql mysqli zip bcmath gd
 
+COPY ./uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
