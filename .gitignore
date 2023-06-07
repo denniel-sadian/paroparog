@@ -2,3 +2,4 @@ logs
 .env
 .DS_STORE
 vendor
+uploads
