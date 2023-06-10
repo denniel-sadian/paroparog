@@ -6,10 +6,10 @@ use PDO;
 require_once __DIR__.'/../connection.php';
 require_once 'helper_functions.php';
 
-$TABLE = 'butterflies';
-
 
 class Butterfly {
+
+    const TABLE = 'butterflies';
 
     public $id;
     public $specie_type;
@@ -25,11 +25,9 @@ class Butterfly {
     }
 
     static function search($params) {
-        global $TABLE;
-
         $conn = connect();
 
-        $FILTER = "SELECT * FROM $TABLE";
+        $FILTER = 'SELECT * FROM '.self::TABLE;
         $search = $FILTER.create_where_clause_for_search($params);
 
         $statement = $conn->prepare($search);
@@ -42,11 +40,9 @@ class Butterfly {
     }
 
     static function get($id) {
-        global $TABLE;
-
         $conn = connect();
 
-        $SELECT_ONE = "SELECT * FROM $TABLE where id = :id";
+        $SELECT_ONE = 'SELECT * FROM '.self::TABLE.' where id = :id';
 
         $statement = $conn->prepare($SELECT_ONE);
         $statement->execute([':id' => $id]);
@@ -62,8 +58,8 @@ class Butterfly {
 
         $conn = connect();
 
-        $INSERT = "
-            INSERT INTO $TABLE (
+        $INSERT = '
+            INSERT INTO '.self::TABLE.' (
                 specie_type,
                 class_name,
                 family_name
@@ -72,14 +68,14 @@ class Butterfly {
                 :specie_type,
                 :class_name,
                 :family_name
-            )";
+            )';
 
-        $UPDATE = "
-            UPDATE $TABLE SET
+        $UPDATE = '
+            UPDATE '.self::TABLE.' SET
                 specie_type = :specie_type,
                 class_name = :class_name,
                 family_name = :family_name
-            WHERE id = :id";
+            WHERE id = :id';
 
         $statement = $statement = $conn->prepare($this->id == null ? $INSERT : $UPDATE);
 
@@ -102,11 +98,9 @@ class Butterfly {
     }
 
     function delete() {
-        global $TABLE;
-
         $conn = connect();
 
-        $DELETE = "DELETE FROM $TABLE WHERE id = :id";
+        $DELETE = 'DELETE FROM '.self::TABLE.' WHERE id = :id';
 
         if ($this->id != null) {
             $statement = $conn->prepare($DELETE);
