@@ -21,11 +21,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./app/media:/var/www/media
-      - ./app/utilities:/var/www/utilities
-      - ./app/templates:/var/www/templates
-      - ./app/index.php:/var/www/index.php
-      - ./app/twig.php:/var/www/twig.php
+      - ./app:/var/www
 
   database:
     image: mysql
