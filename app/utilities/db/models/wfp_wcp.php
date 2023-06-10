@@ -19,7 +19,8 @@ class WfpWcp {
     public $farm_address;
     public $farm_photo_link;
     public $wcp_no;
-    public $wfp_no;
+    public $issuance_date;
+    public $expiry_date;
 
     static function create($fields) {
         $wfpwcp = new WfpWcp();
@@ -30,19 +31,21 @@ class WfpWcp {
         $wfpwcp->farm_photo_link = $fields['farm_photo_link'];
         $wfpwcp->wcp_no = $fields['wcp_no'];
         $wfpwcp->wfp_no = $fields['wfp_no'];
+        $wfpwcp->issuance_date = $fields['issuance_date'];
+        $wfpwcp->expiry_date = $fields['expiry_date'];
         return $wfpwcp;
     }
 
-    static function search($params) {
+    static function search($params, $is_strict) {
         global $TABLE;
 
         $conn = connect();
 
         $FILTER = 'SELECT * FROM '.self::TABLE;
-        $search = $FILTER.create_where_clause_for_search($params);
+        $search = $FILTER.create_where_clause_for_search($params, $is_strict);
 
         $statement = $conn->prepare($search);
-        $statement->execute(create_params_for_search($params));
+        $statement->execute(create_params_for_search($params, $is_strict));
         $objs = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\WfpWcp');
 
         $conn = null;
@@ -80,7 +83,9 @@ class WfpWcp {
                 farm_address,
                 farm_photo_link,
                 wcp_no,
-                wfp_no
+                wfp_no,
+                issuance_date,
+                expiry_date
             )
             VALUES (
                 :permitee_name,
@@ -90,7 +95,9 @@ class WfpWcp {
                 :farm_address,
                 :farm_photo_link,
                 :wcp_no,
-                :wfp_no
+                :wfp_no,
+                :issuance_date,
+                :expiry_date
             )';
 
         $UPDATE = '
@@ -102,7 +109,9 @@ class WfpWcp {
                 farm_address = :farm_address,
                 farm_photo_link = :farm_photo_link,
                 wcp_no = :wcp_no,
-                wfp_no = :wfp_no
+                wfp_no = :wfp_no,
+                issuance_date = :issuance_date,
+                expiry_date = :expiry_date
             WHERE id = :id';
 
         $statement = $statement = $conn->prepare($this->id == null ? $INSERT : $UPDATE);
@@ -115,7 +124,9 @@ class WfpWcp {
             ':farm_address' => $this->farm_address,
             ':farm_photo_link' => $this->farm_photo_link,
             ':wcp_no' => strtolower($this->wcp_no),
-            ':wfp_no' => strlower($this->wfp_no)
+            ':wfp_no' => strlower($this->wfp_no),
+            ':issuance_date' => $this->issuance_date,
+            ':expiry_date' => $this->expiry_date
         ];
         if ($this->id != null) {
             $params[':id'] = $this->id;
