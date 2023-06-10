@@ -1,0 +1,113 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Nunito', sans-serif !important;
+}
+
+/* NAV BAR */
+
+nav {
+    width: 100%;
+    position: fixed;
+    top: 0px;
+}
+
+nav a {
+    text-decoration: none;
+}
+
+.nav-cont {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.nav-cont .brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+}
+
+.nav-cont .brand img {
+    width: 50px;
+    height: 50px;
+}
+
+.nav-cont .brand span {
+    font-family: 'Roboto Slab', serif !important;
+    font-weight: 800;
+    font-size: 25px;
+    padding-left: 8px;
+}
+
+.nav-cont .links {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px;
+}
+
+.nav-cont .links > a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 20px;
+    margin-left: 10px;
+    border-radius: 32px;
+    transition: 0.3s;
+}
+
+.nav-cont .links > a:hover {
+    background-color: rgba(255, 255, 255, 0.288);
+}
+
+/* CONTENT */
+.page {
+    padding-top: 66px;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+}
+
+.page .content {
+    width: 100%;
+    height: 100%;
+}
+
+/* FOOTER */
+footer {
+    width: 100%;
+    height: 300px;
+}
+
+
+/* UI */
+
+.w3-btn {
+    font-weight: bold;
+}
+
+.text-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.text-box span {
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.text-box input {
+    border: 1px solid gray;
+    border-radius: 6px;
+    height: 40px;
+}
