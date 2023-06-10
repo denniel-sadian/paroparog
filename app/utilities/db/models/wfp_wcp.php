@@ -6,10 +6,10 @@ use PDO;
 require_once __DIR__.'/../connection.php';
 require_once 'helper_functions.php';
 
-$TABLE = 'wfp_wcp_details';
-
 
 class WfpWcp {
+
+    const TABLE = 'wfp_wcp_details';
 
     public $id;
     public $permitee_name;
@@ -38,7 +38,7 @@ class WfpWcp {
 
         $conn = connect();
 
-        $FILTER = "SELECT * FROM $TABLE";
+        $FILTER = 'SELECT * FROM '.self::TABLE;
         $search = $FILTER.create_where_clause_for_search($params);
 
         $statement = $conn->prepare($search);
@@ -55,7 +55,7 @@ class WfpWcp {
 
         $conn = connect();
 
-        $SELECT_ONE = "SELECT * FROM $TABLE where id = :id";
+        $SELECT_ONE = 'SELECT * FROM '.self::TABLE.' where id = :id';
 
         $statement = $conn->prepare($SELECT_ONE);
         $statement->execute([':id' => $id]);
@@ -71,8 +71,8 @@ class WfpWcp {
 
         $conn = connect();
 
-        $INSERT = "
-            INSERT INTO $TABLE (
+        $INSERT = '
+            INSERT INTO '.self::TABLE.' (
                 permitee_name,
                 permitee_address,
                 permitee_photo_link,
@@ -91,10 +91,10 @@ class WfpWcp {
                 :farm_photo_link,
                 :wcp_no,
                 :wfp_no
-            )";
+            )';
 
-        $UPDATE = "
-            UPDATE $TABLE SET
+        $UPDATE = '
+            UPDATE '.self::TABLE.' SET
                 permitee_name = :permitee_name,
                 permitee_address = :permitee_address,
                 permitee_photo_link = :permitee_photo_link,
@@ -103,7 +103,7 @@ class WfpWcp {
                 farm_photo_link = :farm_photo_link,
                 wcp_no = :wcp_no,
                 wfp_no = :wfp_no
-            WHERE id = :id";
+            WHERE id = :id';
 
         $statement = $statement = $conn->prepare($this->id == null ? $INSERT : $UPDATE);
 
@@ -135,7 +135,7 @@ class WfpWcp {
 
         $conn = connect();
 
-        $DELETE = "DELETE FROM $TABLE WHERE id = :id";
+        $DELETE = 'DELETE FROM '.self::TABLE.' WHERE id = :id';
 
         if ($this->id != null) {
             $statement = $conn->prepare($DELETE);
