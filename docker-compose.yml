@@ -37,6 +37,8 @@ services:
     ports:
       - 3306:3306
     volumes:
+      - ./database:/etc/mysql/conf.d
+      - ./logs/database:/var/log/mysql
       - paroparogdb:/var/lib/mysql
 
   phpmyadmin:
