@@ -24,14 +24,14 @@ class Butterfly {
         return $butterfly;
     }
 
-    static function search($params) {
+    static function search($params, $is_strict) {
         $conn = connect();
 
         $FILTER = 'SELECT * FROM '.self::TABLE;
-        $search = $FILTER.create_where_clause_for_search($params);
+        $search = $FILTER.create_where_clause_for_search($params, $is_strict);
 
         $statement = $conn->prepare($search);
-        $statement->execute(create_params_for_search($params));
+        $statement->execute(create_params_for_search($params, $is_strict));
         $objs = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\Butterfly');
 
         $conn = null;
