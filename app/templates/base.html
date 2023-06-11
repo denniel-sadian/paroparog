@@ -3,8 +3,8 @@
 
 <head>
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="media/static/css/w3.css" />
-    <link rel="stylesheet" href="media/static/css/global.css?v=3" />
+    <link rel="stylesheet" href="/media/static/css/w3.css" />
+    <link rel="stylesheet" href="/media/static/css/global.css?v=11" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -16,6 +16,7 @@
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&family=Roboto+Slab:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <script src="https://kit.fontawesome.com/209b41c676.js" crossorigin="anonymous"></script>
+    <script src="/media/static/js/jquery.js"></script>
     {% block styles %}{% endblock %}
 </head>
 
@@ -23,19 +24,38 @@
     <nav class="w3-blue">
         <div class="nav-cont">
             <a href="/" class="brand">
-                <img src="media/static/img/brand.png" />
+                <img src="/media/static/img/brand.png" />
                 <span>Butterfly LTP System</span>
             </a>
             <div class="links">
-                <a href="login.php">Login</a>
-                <a href="register.php">Register</a>
+                {% if user != null and user.type == 'ADMIN' %}
+                <a href="/admin/butterflies/list.php"
+                    class="{% if tab == 'butterflies' %}current-tab{% endif %}">Butterflies</a>
+                <a href="/admin/applications/list.php">LTP Applications</a>
+                {% else %}
+                {% endif %}
+
+                {% if user %}
+                <a href="/logout.php">Logout</a>
+                <a href="/profile.php" class="name"><b><i class="fa fa-user-circle-o"></i> {{ user.first_name ~ ' ' ~
+                        user.last_name
+                        }}</b></a>
+                {% else %}
+                <a href="/login.php">Login</a>
+                <a href="/register.php">Register</a>
+                {% endif %}
             </div>
         </div>
     </nav>
     <div class="page">
         <div class="content">{% block content %}{% endblock %}</div>
-        <footer class="w3-blue"></footer>
+        <footer class="w3-blue">
+            <div class="cont">
+                <h2>Department of Environment and Natural Resources</h2>
+            </div>
+        </footer>
     </div>
+    {% block scripts %}{% endblock %}
 </body>
 
 </html>
