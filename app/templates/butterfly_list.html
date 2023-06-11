@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Butterflies{% endblock %}
+
+{% block styles %}
+<style>
+    main {
+        padding: 100px 20px;
+    }
+
+    main .cont {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 1100px;
+    }
+
+    h1 {
+        font-family: 'Roboto Slab', serif !important;
+        font-weight: 900;
+    }
+
+    .butterfly {
+        width: 100%;
+        border-bottom: 2px solid rgb(205, 205, 205);
+        margin-bottom: 20px;
+    }
+
+    .butterfly .details {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr auto;
+        padding: 20px;
+    }
+
+    .inf {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .inf label {
+        font-size: 12px;
+    }
+
+    .inf span {
+        font-size: 20px;
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+
+    .btns {
+        display: flex;
+    }
+
+    .btns>* {
+        border-radius: 100%;
+        width: 40px;
+        height: 40px;
+        margin-left: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .list-head {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+    }
+
+    form {
+        width: 100%;
+        padding: 20px;
+        border-radius: 20px;
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="cont">
+        <div class="list-head">
+            <h1><i class="fa fa-list-ul"></i> Butterflies</h1>
+            <button class="w3-btn w3-blue w3-round-xxlarge" id="creation-form-btn"><i class="fa fa-plus-circle"></i> Add
+                Butterfly</button>
+        </div>
+        <form action="/admin/butterflies/create.php" method="POST" id="creation-form" class="w3-pale-blue">
+            <div class="text-box">
+                <span>Specie Type:</span>
+                <input type="text" name="specie_type" required>
+            </div>
+            <div class="text-box">
+                <span>Class Name:</span>
+                <input type="text" name="class_name" required>
+            </div>
+            <div class="text-box">
+                <span>Family Name:</span>
+                <input type="text" name="family_name" required>
+            </div>
+            <div class="buttons">
+                <button class="w3-btn w3-text-blue w3-border w3-border-blue w3-round-xxlarge"
+                    onclick="event.preventDefault(); $('#creation-form').fadeToggle();">Close</button>
+                <input type="submit" class="w3-btn w3-blue w3-round-xxlarge" name="submit" value="Save">
+            </div>
+        </form>
+        {% for i in page.items %}
+        <div class="butterfly">
+            <div class="details" id="details-{{ i.id }}">
+                <div class="inf">
+                    <label>Specie Type:</label>
+                    <span>{{ i.specie_type }}</span>
+                </div>
+                <div class="inf">
+                    <label>Class Name:</label>
+                    <span>{{ i.class_name }}</span>
+                </div>
+                <div class="inf">
+                    <label>Family Name:</label>
+                    <span>{{ i.family_name }}</span>
+                </div>
+                <div class="btns">
+                    <button class="w3-btn w3-green" onclick="edit('{{ i.id }}');">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </button>
+                </div>
+            </div>
+            <form id="edit-form-{{ i.id }}" action="/admin/butterflies/update.php?id={{ i.id }}" method="POST"
+                class="w3-pale-blue">
+                <div class="text-box">
+                    <span>Specie Type:</span>
+                    <input type="text" name="specie_type" value="{{ i.specie_type }}" required>
+                </div>
+                <div class="text-box">
+                    <span>Class Name:</span>
+                    <input type="text" name="class_name" value="{{ i.class_name }}" required>
+                </div>
+                <div class="text-box">
+                    <span>Family Name:</span>
+                    <input type="text" name="family_name" value="{{ i.family_name }}" required>
+                </div>
+                <div class="buttons">
+                    <a href="/admin/butterflies/delete.php?id={{ i.id }}"
+                        class="w3-btn w3-text-red w3-round-xxlarge w3-border w3-border-red">Delete</a>
+                    <button class="w3-btn w3-text-blue w3-border w3-border-blue w3-round-xxlarge"
+                        onclick="event.preventDefault(); edit('{{ i.id }}');">Close</button>
+                    <input type="submit" class="w3-btn w3-blue w3-round-xxlarge" name="submit" value="Save">
+                </div>
+            </form>
+        </div>
+        {% endfor %}
+        {% include 'paginator.html' %}
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function edit(id) {
+        $(`#details-${id}`).fadeToggle();
+        $(`#edit-form-${id}`).fadeToggle();
+    }
+
+    $(function () {
+        $('#creation-form-btn').click(function () {
+            $('#creation-form').fadeToggle();
+        });
+
+        $('#creation-form-close-btn').click(function () {
+
+        });
+    });
+</script>
+{% endblock %}

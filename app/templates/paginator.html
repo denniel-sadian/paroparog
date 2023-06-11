@@ -1,0 +1,9 @@
+<div class="paginator">
+    {% if page.prev_page %}
+    <a href="?page={{ page.prev_page }}" class="w3-btn w3-pale-blue"><i class="fa fa-arrow-left"></i></a>
+    {% endif %}
+    <span>Page {{ page.number }} of {{ page.total_pages }}</span>
+    {% if page.next_page %}
+    <a href="?page={{ page.next_page }}" class="w3-btn w3-pale-blue"><i class="fa fa-arrow-right"></i></a>
+    {% endif %}
+</div>
