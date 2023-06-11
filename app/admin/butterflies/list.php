@@ -14,9 +14,21 @@ use DTOs\PageRequest;
 
 allow([UserType::ADMIN]);
 
-if ($_GET['page'] == null) $_GET['page'] = 1;
+if (!isset($_GET['page'])) {
+    $_GET['page'] = 1;
+}
 
-$page = Butterfly::filter(null, null, PageRequest::create($_GET['page']-1, 5));
+$search = null;
+if (isset($_GET['search']) && $_GET['search'] != '') {
+    $CONTEXT['search'] = $_GET['search'];
+    $search = Search::create([
+        'specie_type' => $_GET['search'],
+        'class_name' => $_GET['search'],
+        'family_name' => $_GET['search']
+    ], 'OR', false);
+}
+
+$page = Butterfly::filter($search, Sort::create('specie_type', 'ASC'), PageRequest::create($_GET['page']-1, $_ENV['PAGE_SIZE']));
 
 $CONTEXT['tab'] = 'butterflies';
 $CONTEXT['page'] = $page;
