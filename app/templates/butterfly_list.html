@@ -22,13 +22,13 @@
     .butterfly {
         width: 100%;
         border-bottom: 2px solid rgb(205, 205, 205);
-        margin-bottom: 20px;
+        margin-bottom: 8px;
     }
 
     .butterfly .details {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr auto;
-        padding: 20px;
+        padding: 10px 20px;
     }
 
     .inf {
@@ -102,6 +102,7 @@
                 <input type="submit" class="w3-btn w3-blue w3-round-xxlarge" name="submit" value="Save">
             </div>
         </form>
+        {% include 'search_box.html' %}
         {% for i in page.items %}
         <div class="butterfly">
             <div class="details" id="details-{{ i.id }}">
@@ -118,7 +119,7 @@
                     <span>{{ i.family_name }}</span>
                 </div>
                 <div class="btns">
-                    <button class="w3-btn w3-green" onclick="edit('{{ i.id }}');">
+                    <button class="w3-btn w3-hover-green" onclick="edit('{{ i.id }}');">
                         <i class="fa fa-pencil-square-o"></i>
                     </button>
                 </div>
