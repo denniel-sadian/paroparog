@@ -1,10 +1,15 @@
 <?php
 namespace Models;
 
-use PDO;
+require_once "/var/www/utilities/db/connection.php";
+require_once "/var/www/utilities/db/models/helper_functions.php";
+require_once '/var/www/utilities/db/models/dtos.php';
 
-require_once __DIR__.'/../connection.php';
-require_once 'helper_functions.php';
+use PDO;
+use DTOs\PageRequest;
+use DTOs\Page;
+use DTOs\Search;
+use DTOs\Sort;
 
 
 class UserType {
@@ -50,19 +55,40 @@ class User {
         return $user;
     }
 
-    static function search($params, $is_strict) {
+    static function filter(Search $search = null, Sort $sort = null, PageRequest $page_req = null) {
+        if ($search == null) $search = Search::create();
+        if ($sort == null) $sort = Sort::create();
+        if ($page_req == null) $page_req = PageRequest::create();
+
         $conn = connect();
 
-        $FILTER = 'SELECT * FROM '.self::TABLE;
-        $search = $FILTER.create_where_clause_for_search($params, $is_strict);
+        $WHERE = create_where_clause_for_search($search);
+        $SQL = 'SELECT * FROM '.self::TABLE;
+        $SQL = $SQL.$WHERE;
 
-        $statement = $conn->prepare($search);
-        $statement->execute(create_params_for_search($params, $is_strict));
-        $objs = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\User');
+        if ($sort != null) {
+            $SQL = $SQL." order by $sort->field $sort->order";
+        }
+        if ($page_req != null) {
+            $SQL = $SQL." LIMIT $page_req->size OFFSET $page_req->offset";
+        }
+
+        $statement = $conn->prepare($SQL);
+        $statement->execute(create_params_for_search($search));
+        $items = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\User');
+
+        $SQL = 'SELECT count(*) FROM '.self::TABLE;
+        $SQL = $SQL.$WHERE;
+
+        $statement = $conn->prepare($SQL);
+        $statement->execute(create_params_for_search($search));
+        $total_items = $statement->fetchColumn();
+
+        $page = Page::create($items, $page_req->number+1, $page_req->size, $total_items);
 
         $conn = null;
 
-        return $objs;
+        return $page;
     }
 
     static function get($id) {
