@@ -147,6 +147,29 @@ footer .cont h2 {
     margin-left: 8px;
 }
 
+.search-box {
+    width: 100%;
+    padding: 10px 0px;
+}
+
+.search-box form {
+    padding: 0px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-box form input {
+    border-radius: 32px 0px 0px 32px;
+    border: 2px solid #4CAF50;
+    width: 100%;
+    max-width: 300px;
+}
+
+.search-box form button {
+    border-radius: 0px 32px 32px 0px;
+}
+
 .paginator {
     margin-top: 50px;
     display: flex;
