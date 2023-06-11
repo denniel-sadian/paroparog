@@ -40,8 +40,8 @@ class Page {
         if (($total_items % $size) != 0) $total_pages++;
         $page->total_pages = (int) $total_pages;
 
-        if (($number - 1) > 0) $page->prev_page = $number - 1;
-        if (($number + 1) < $total_pages) $page->next_page = $number + 1;
+        if (($number - 1) >= 0) $page->prev_page = $number - 1;
+        if (($number + 1) <= $total_pages) $page->next_page = $number + 1;
 
         return $page;
     }
