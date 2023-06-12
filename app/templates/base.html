@@ -4,7 +4,7 @@
 <head>
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="/media/static/css/w3.css" />
-    <link rel="stylesheet" href="/media/static/css/global.css?v=17" />
+    <link rel="stylesheet" href="/media/static/css/global.css?v=19" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -31,8 +31,9 @@
                 {% if user != null and user.type == 'ADMIN' %}
                 <a href="/admin/butterflies/list.php?page=1"
                     class="{% if tab == 'butterflies' %}current-tab{% endif %}">Butterflies</a>
+                <a href="/admin/wfpwcp/list.php?page=1" class="{% if tab == 'wfpwcp' %}current-tab{% endif %}">WFP &
+                    WCP</a>
                 <a href="/admin/users/list.php?page=1" class="{% if tab == 'users' %}current-tab{% endif %}">Users</a>
-                <a href="/admin/applications/list.php?page=1">LTP Applications</a>
                 {% else %}
                 {% endif %}
 
