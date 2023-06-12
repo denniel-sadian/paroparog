@@ -5,7 +5,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 function send_mail($to_email, $message) {
     $mail = new PHPMailer();
     $mail->isSMTP();
-    $mail->SMTPDebug = 2;
+    //$mail->SMTPDebug = 2;
     $mail->Host = $_ENV['EMAIL_HOST'];
     $mail->Port = $_ENV['EMAIL_PORT'];
     $mail->setFrom($_ENV['EMAIL_FROM'], $_ENV['EMAIL_FROM_NAME']);
