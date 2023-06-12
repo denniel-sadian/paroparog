@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block styles %}
+<style>
+    main {
+        padding: 100px 20px;
+    }
+
+    main .cont {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 1100px;
+    }
+
+    h1 {
+        font-family: 'Roboto Slab', serif !important;
+        font-weight: 900;
+    }
+
+    .item {
+        width: 100%;
+        border-bottom: 2px solid rgb(205, 205, 205);
+        margin-bottom: 8px;
+    }
+
+    .item .details {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr auto;
+        padding: 10px 20px;
+    }
+
+    .inf {
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+    }
+
+    .inf label {
+        font-size: 12px;
+    }
+
+    .inf span {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .btns {
+        display: flex;
+    }
+
+    .btns>* {
+        border-radius: 100%;
+        width: 40px;
+        height: 40px;
+        margin-left: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    table th,
+    table .name {
+        font-family: 'Roboto Slab', serif !important;
+        text-align: left;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="cont">
+        <div class="list-head">
+            <h1><i class="fa fa-list-ul"></i> User Accounts</h1>
+            <a href="/admin/users/create.php" class="w3-btn w3-blue w3-round-xxlarge"><i class="fa fa-plus-circle"></i>
+                Add User</a>
+        </div>
+        {% include 'search_box.html' %}
+        <table class="w3-table-all">
+            <tr class="head">
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Type</th>
+                <th>Date Joined</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            {% for i in page.items %}
+            <tr>
+                <td class="name">{% if i.gender == 'MALE' %}Mr.{% else %}Ms.{% endif %} {{ i.first_name }} {{
+                    i.last_name
+                    }}</td>
+                <td>{{ i.username }}</td>
+                <td>{{ i.email }}</td>
+                <td>{{ i.type }}</td>
+                <td>{{ i.created_at }}</td>
+                <td>{% if i.active %}<span class="w3-text-green"><i class="fa fa-check"></i> Active</span>{% else
+                    %}<span class="w3-text-red"><i class="fa fa-times"></i> Deactivated</span>{% endif %}</td>
+                <td>
+                    <div class="btns">
+                        <a class="w3-btn w3-hover-green" href="/admin/users/update.php?id={{ i.id }}">
+                            <i class="fa fa-pencil-square-o"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% include 'paginator.html' %}
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
