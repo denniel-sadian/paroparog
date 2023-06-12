@@ -41,6 +41,7 @@ class User {
     public $type;
     public $created_at;
     public $active;
+    public $password_changed;
 
     static function create($fields) {
         $user = new User();
@@ -51,7 +52,8 @@ class User {
         $user->last_name = $fields['last_name'];
         $user->gender = $fields['gender'];
         $user->type = $fields['type'];
-        $user->active = $fields['active'];
+        $user->active = true;
+        $user->password_changed = false;
         return $user;
     }
 
@@ -117,7 +119,8 @@ class User {
                 last_name,
                 gender,
                 type,
-                active
+                active,
+                password_changed
             )
             VALUES (
                 :username,
@@ -127,7 +130,8 @@ class User {
                 :last_name,
                 :gender,
                 :type,
-                :active
+                :active,
+                :password_changed
             )';
 
         $UPDATE = '
@@ -140,26 +144,26 @@ class User {
                 last_name = :last_name,
                 gender = :gender,
                 type = :type,
-                active = :active
+                active = :active,
+                password_changed = :password_changed
             WHERE id = :id';
 
         $statement = $statement = $conn->prepare($this->id == null ? $INSERT : $UPDATE);
 
-        $params = [
-            ':username' => $this->username,
-            ':email' => $this->email,
-            ':password' => $this->password,
-            ':first_name' => $this->first_name,
-            ':last_name' => $this->last_name,
-            ':gender' => $this->gender,
-            ':type' => $this->type,
-            ':active' => $this->active,
-        ];
+        $statement->bindParam(':username', $this->username);
+        $statement->bindParam(':email', $this->email);
+        $statement->bindParam(':password', $this->password);
+        $statement->bindParam(':first_name', $this->first_name);
+        $statement->bindParam(':last_name', $this->last_name);
+        $statement->bindParam(':gender', $this->gender);
+        $statement->bindParam(':type', $this->type);
+        $statement->bindParam(':active', $this->active, PDO::PARAM_BOOL);
+        $statement->bindParam(':password_changed', $this->password_changed, PDO::PARAM_BOOL);
         if ($this->id != null) {
-            $params[':id'] = $this->id;
+            $statement->bindParam(':id', $this->id, PDO::PARAM_INT);
         }
 
-        $statement->execute($params);
+        $statement->execute();
 
         if ($this->id == null) {
             $this->id = $conn->lastInsertId();
@@ -179,6 +183,10 @@ class User {
         }
 
         $conn = null;
+    }
+
+    function set_password($password) {
+        $this->password = md5($password);
     }
 
 }
