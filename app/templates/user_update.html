@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block styles %}
+<style>
+    main {
+        padding: 100px 20px;
+    }
+
+    main .cont {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 600px;
+    }
+
+    h1 {
+        font-family: 'Roboto Slab', serif !important;
+        font-weight: 900;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="cont">
+        <div class="list-head">
+            <h1><i class="fa fa-user-plus"></i> Editing User</h1>
+        </div>
+        <form action="" method="POST">
+            <div class="text-box">
+                <span>First Name:</span>
+                <input type="text" name="first_name" value="{{ editing_user.first_name }}" required>
+            </div>
+            <div class="text-box">
+                <span>Last Name:</span>
+                <input type="text" name="last_name" value="{{ editing_user.last_name }}" required>
+            </div>
+            <div class="text-box">
+                <span>User Type:</span>
+                <select name="type" value="{{ editing_user.type }}">
+                    <option value="CLIENT" {% if editing_user.type=='CLIENT' %}selected{% endif %}>CLIENT</option>
+                    <option value="PAYMENT_SIGNATORY" {% if editing_user.type=='PAYMENT_SIGNATORY' %}selected{% endif
+                        %}>PAYMENT_SIGNATORY</option>
+                    <option value="PERMIT_SIGNATORY" {% if editing_user.type=='PERMIT_SIGNATORY' %}selected{% endif %}>
+                        PERMIT SIGNATORY</option>
+                    <option value="RELEASING_PERSONNEL" {% if editing_user.type=='RELEASING_PERSONNEL' %}selected{%
+                        endif %}>RELEASING PERSONNEL</option>
+                    <option value="ADMIN" {% if editing_user.type=='ADMIN' %}selected{% endif %}>ADMIN
+                    </option>
+                </select>
+            </div>
+            <div class="text-box">
+                <span>Email:</span>
+                <input type="email" name="email" value="{{ editing_user.email }}" required>
+            </div>
+            <div class="text-box">
+                <span>Username:</span>
+                <input type="text" name="username" value="{{ editing_user.username }}" required>
+            </div>
+            <div class="text-box">
+                <span>Gender:</span>
+                <select name="gender" value="{{ editing_user.gender }}">
+                    <option value="MALE" {% if editing_user.gender=='MALE' %}selected{% endif %}>MALE</option>
+                    <option value="FEMALE" {% if editing_user.gender=='FEMALE' %}selected{% endif %}>FEMALE</option>
+                </select>
+            </div>
+            <div class="text-box">
+                <span>Status:</span>
+                <select name="active">
+                    <option value="1" {% if editing_user.active==1 %}selected{% endif %}>ACTIVE</option>
+                    <option value="0" {% if editing_user.active==0 %}selected{% endif %}>DEACTIVATED</option>
+                </select>
+            </div>
+            <div class="buttons">
+                <a href="/admin/users/list.php"
+                    class="w3-btn w3-text-blue w3-round-large w3-border w3-border-blue">Back</a>
+                <a href="/admin/users/delete.php?id{{ editing_user.id }}"
+                    class="w3-btn w3-text-red w3-round-large w3-border w3-border-red">Delete</a>
+                <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Save">
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+</script>
+{% endblock %}
