@@ -18,6 +18,13 @@ class UserType {
     const PAYMENT_SIGNATORY = 'PAYMENT_SIGNATORY';
     const PERMIT_SIGNATORY = 'PERMIT_SIGNATORY';
     const RELEASING_PERSONNEL = 'RELEASING_PERSONNEL';
+    const ALL = [
+        self::CLIENT,
+        self::ADMIN,
+        self::PAYMENT_SIGNATORY,
+        self::PERMIT_SIGNATORY,
+        self::RELEASING_PERSONNEL
+    ];
 }
 
 
