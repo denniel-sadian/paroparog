@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}WFP and WCP{% endblock %}
+
+{% block styles %}
+<style>
+    main {
+        padding: 100px 20px;
+    }
+
+    main .cont {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 600px;
+    }
+
+    h1 {
+        font-family: 'Roboto Slab', serif !important;
+        font-weight: 900;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="cont">
+        <div class="list-head">
+            <h1><i class="fa fa-pencil-square-o"></i> Editing Wildlife Farm/Collector's Permits</h1>
+        </div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="text-box">
+                <span>Wildlife Farm Permit No:</span>
+                <input type="text" name="wfp_no" value="{{ item.wfp_no }}" required>
+            </div>
+            <div class="text-box">
+                <span>Wildlife Collector's Permit No:</span>
+                <input type="text" name="wcp_no" value="{{ item.wcp_no }}" required>
+            </div>
+            <div class="text-box">
+                <span>Issuance Date:</span>
+                <input type="date" name="issuance_date" value="{{ item.issuance_date }}" required>
+            </div>
+            <div class="text-box">
+                <span>Expiry Date:</span>
+                <input type="date" name="expiry_date" value="{{ item.expiry_date }}" required>
+            </div>
+            <div class="text-box">
+                <span>Permitee Name:</span>
+                <input type="text" name="permitee_name" value="{{ item.permitee_name }}" required>
+            </div>
+            <div class="text-box">
+                <span>Permitee Address:</span>
+                <input type="text" name="permitee_address" value="{{ item.permitee_address }}" required>
+            </div>
+            <div class="text-box">
+                <span>Farm Name:</span>
+                <input type="text" name="farm_name" value="{{ item.farm_name }}" required>
+            </div>
+            <div class="text-box">
+                <span>Farm Address:</span>
+                <input type="text" name="farm_address" value="{{ item.farm_address }}" required>
+            </div>
+            <div class="file-input">
+                <span>Wildlife Farm Permit Photo:</span>
+                <input type="file" name="wfp_photo">
+                {% if item.wfp_photo_link %}
+                <a href="{{ item.wfp_photo_link }}" target="_blank"><i class="fa fa-external-link"></i> View current</a>
+                {% endif %}
+            </div>
+            <div class="file-input">
+                <span>Wildlife Collector's Permit Photo:</span>
+                <input type="file" name="wcp_photo">
+                {% if item.wcp_photo_link %}
+                <a href="{{ item.wcp_photo_link }}" target="_blank"><i class="fa fa-external-link"></i> View current</a>
+                {% endif %}
+            </div>
+            <div class="file-input">
+                <span>Permitee Photo:</span>
+                <input type="file" name="permitee_photo">
+                {% if item.permitee_photo_link %}
+                <a href="{{ item.permitee_photo_link }}" target="_blank"><i class="fa fa-external-link"></i> View
+                    current</a>
+                {% endif %}
+            </div>
+            <div class="file-input">
+                <span>Farm Photo:</span>
+                <input type="file" name="farm_photo">
+                {% if item.farm_photo_link %}
+                <a href="{{ item.farm_photo_link }}" target="_blank"><i class="fa fa-external-link"></i> View
+                    current</a>
+                {% endif %}
+            </div>
+            <div class="buttons">
+                <a href="/admin/wfpwcp/list.php"
+                    class="w3-btn w3-text-blue w3-round-large w3-border w3-border-blue">Back</a>
+                <a href="/admin/wfpwcp/delete.php?id{{ item.id }}"
+                    class="w3-btn w3-text-red w3-round-large w3-border w3-border-red">Delete</a>
+                <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Save">
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+</script>
+{% endblock %}
