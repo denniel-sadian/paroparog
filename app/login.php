@@ -4,6 +4,7 @@ require_once '/var/www/utilities/auth/session.php';
 require_once '/var/www/utilities/auth/guards.php';
 
 $context = array();
+$context['tab'] = 'login';
 
 if (isset($_POST['submit'])) {
     $user = login($_POST['username'], $_POST['password']);
