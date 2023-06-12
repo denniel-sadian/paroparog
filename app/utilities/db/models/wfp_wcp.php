@@ -5,6 +5,12 @@ use PDO;
 
 require_once '/var/www/utilities/db/connection.php';
 require_once '/var/www/utilities/db/models/helper_functions.php';
+require_once '/var/www/utilities/db/models/dtos.php';
+
+use DTOs\PageRequest;
+use DTOs\Page;
+use DTOs\Search;
+use DTOs\Sort;
 
 
 class WfpWcp {
@@ -18,19 +24,25 @@ class WfpWcp {
     public $farm_name;
     public $farm_address;
     public $farm_photo_link;
+    public $wfp_no;
+    public $wfp_photo_link;
     public $wcp_no;
+    public $wcp_photo_link;
     public $issuance_date;
     public $expiry_date;
 
     static function create($fields) {
         $wfpwcp = new WfpWcp();
+        $wfpwcp->permitee_name = $fields['permitee_name'];
         $wfpwcp->permitee_address = $fields['permitee_address'];
         $wfpwcp->permitee_photo_link = $fields['permitee_photo_link'];
         $wfpwcp->farm_name = $fields['farm_name'];
         $wfpwcp->farm_address = $fields['farm_address'];
         $wfpwcp->farm_photo_link = $fields['farm_photo_link'];
-        $wfpwcp->wcp_no = $fields['wcp_no'];
         $wfpwcp->wfp_no = $fields['wfp_no'];
+        $wfpwcp->wfp_photo_link = $fields['wfp_photo_link'];
+        $wfpwcp->wcp_no = $fields['wcp_no'];
+        $wfpwcp->wcp_photo_link = $fields['wcp_photo_link'];
         $wfpwcp->issuance_date = $fields['issuance_date'];
         $wfpwcp->expiry_date = $fields['expiry_date'];
         return $wfpwcp;
@@ -101,8 +113,10 @@ class WfpWcp {
                 farm_name,
                 farm_address,
                 farm_photo_link,
-                wcp_no,
                 wfp_no,
+                wfp_photo_link,
+                wcp_no,
+                wcp_photo_link,
                 issuance_date,
                 expiry_date
             )
@@ -113,8 +127,10 @@ class WfpWcp {
                 :farm_name,
                 :farm_address,
                 :farm_photo_link,
-                :wcp_no,
                 :wfp_no,
+                :wfp_photo_link,
+                :wcp_no,
+                :wcp_photo_link,
                 :issuance_date,
                 :expiry_date
             )';
@@ -127,8 +143,10 @@ class WfpWcp {
                 farm_name = :farm_name,
                 farm_address = :farm_address,
                 farm_photo_link = :farm_photo_link,
-                wcp_no = :wcp_no,
                 wfp_no = :wfp_no,
+                wfp_photo_link = :wfp_photo_link,
+                wcp_no = :wcp_no,
+                wcp_photo_link = :wcp_photo_link,
                 issuance_date = :issuance_date,
                 expiry_date = :expiry_date
             WHERE id = :id';
@@ -142,8 +160,10 @@ class WfpWcp {
             ':farm_name' => $this->farm_name,
             ':farm_address' => $this->farm_address,
             ':farm_photo_link' => $this->farm_photo_link,
-            ':wcp_no' => strtolower($this->wcp_no),
-            ':wfp_no' => strlower($this->wfp_no),
+            ':wfp_no' => strtoupper($this->wfp_no),
+            ':wfp_photo_link' => $this->wfp_photo_link,
+            ':wcp_no' => strtoupper($this->wcp_no),
+            ':wcp_photo_link' => $this->wcp_photo_link,
             ':issuance_date' => $this->issuance_date,
             ':expiry_date' => $this->expiry_date
         ];
