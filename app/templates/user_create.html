@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block styles %}
+<style>
+    main {
+        padding: 100px 20px;
+    }
+
+    main .cont {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 600px;
+    }
+
+    h1 {
+        font-family: 'Roboto Slab', serif !important;
+        font-weight: 900;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="cont">
+        <div class="list-head">
+            <h1><i class="fa fa-user-plus"></i> Create User Account</h1>
+        </div>
+        <form action="" method="POST">
+            <div class="text-box">
+                <span>First Name:</span>
+                <input type="text" name="first_name" id="fn" required>
+            </div>
+            <div class="text-box">
+                <span>Last Name:</span>
+                <input type="text" name="last_name" id="ln" required>
+            </div>
+            <div class="text-box">
+                <span>User Type:</span>
+                <select name="type" id="type">
+                    <option value="CLIENT">CLIENT</option>
+                    <option value="PAYMENT_SIGNATORY">PAYMENT_SIGNATORY</option>
+                    <option value="PERMIT_SIGNATORY">PERMIT SIGNATORY</option>
+                    <option value="RELEASING_PERSONNEL">RELEASING PERSONNEL</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select>
+            </div>
+            <div class="text-box">
+                <span>Email:</span>
+                <input type="email" name="email" required>
+            </div>
+            <div class="text-box">
+                <span>Gender:</span>
+                <select name="gender" id="type">
+                    <option value="MALE">MALE</option>
+                    <option value="FEMALE">FEMALE</option>
+                </select>
+            </div>
+            <div class="text-box">
+                <span>Username: system-generated</span>
+                <input type="text" name="username" class="username" required disabled>
+                <input type="hidden" name="username" class="username">
+            </div>
+            <div class="buttons">
+                <a href="/admin/users/list.php"
+                    class="w3-btn w3-text-blue w3-round-large w3-border w3-border-blue">Back</a>
+                <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Save">
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function buildUsername() {
+        const uType = $('#type').val();
+        const fn = $('#fn').val().replace(' ', '').toLowerCase();
+        const ln = $('#ln').val().replace(' ', '').toLowerCase();
+        let username = uType === 'CLIENT' ? 'ltpmdq_' : '';
+        username += fn.substring(0, 3) + ln;
+        $('.username').val(username.toLowerCase());
+        console.log('Hahaha');
+    }
+
+    $(function () {
+        $('#fn').keydown(buildUsername);
+        $('#ln').keydown(buildUsername);
+        $('#fn').keyup(buildUsername);
+        $('#ln').keyup(buildUsername);
+        $('#type').change(buildUsername);
+        buildUsername();
+    })
+</script>
+{% endblock %}
