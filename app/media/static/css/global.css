@@ -117,17 +117,20 @@ footer .cont h2 {
     font-weight: bold;
 }
 
-.text-box {
+.text-box, .file-input {
     display: flex;
     flex-direction: column;
     width: 100%;
     margin-bottom: 16px;
 }
 
-.text-box span {
+.text-box span, .file-input span {
     font-family: 'Nunito', sans-serif;
     font-size: 12px;
     font-weight: bold;
+}
+.file-input a {
+    color: gray;
 }
 
 .text-box > *:nth-child(2) {
