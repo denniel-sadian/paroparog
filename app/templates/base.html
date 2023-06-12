@@ -4,7 +4,7 @@
 <head>
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="/media/static/css/w3.css" />
-    <link rel="stylesheet" href="/media/static/css/global.css?v=11" />
+    <link rel="stylesheet" href="/media/static/css/global.css?v=17" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -29,20 +29,22 @@
             </a>
             <div class="links">
                 {% if user != null and user.type == 'ADMIN' %}
-                <a href="/admin/butterflies/list.php"
+                <a href="/admin/butterflies/list.php?page=1"
                     class="{% if tab == 'butterflies' %}current-tab{% endif %}">Butterflies</a>
-                <a href="/admin/applications/list.php">LTP Applications</a>
+                <a href="/admin/users/list.php?page=1" class="{% if tab == 'users' %}current-tab{% endif %}">Users</a>
+                <a href="/admin/applications/list.php?page=1">LTP Applications</a>
                 {% else %}
                 {% endif %}
 
                 {% if user %}
                 <a href="/logout.php">Logout</a>
-                <a href="/profile.php" class="name"><b><i class="fa fa-user-circle-o"></i> {{ user.first_name ~ ' ' ~
+                <a href="/profile.php" class="name {% if tab == 'profile' %}current-tab{% endif %}"><b><i
+                            class="fa fa-user-circle-o"></i> {{ user.first_name ~ ' ' ~
                         user.last_name
                         }}</b></a>
                 {% else %}
-                <a href="/login.php">Login</a>
-                <a href="/register.php">Register</a>
+                <a href="/login.php" class="name {% if tab == 'login' %}current-tab{% endif %}">Login</a>
+                <a href="/register.php" class="name {% if tab == 'register' %}current-tab{% endif %}">Register</a>
                 {% endif %}
             </div>
         </div>
@@ -56,6 +58,19 @@
         </footer>
     </div>
     {% block scripts %}{% endblock %}
+    <script>
+        $(function () {
+            [...document.querySelectorAll('a')].forEach(e => {
+                const url = new URL(e.href);
+                for (let [k, v] of new URLSearchParams(window.location.search).entries()) {
+                    if (url.searchParams.get(k) == null) {
+                        url.searchParams.set(k, v);
+                    }
+                }
+                e.href = url.toString();
+            });
+        });
+    </script>
 </body>
 
 </html>
