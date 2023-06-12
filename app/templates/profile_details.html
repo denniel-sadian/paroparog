@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block styles %}
+<style>
+    main {
+        padding: 100px 20px;
+    }
+
+    main .cont {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 600px;
+    }
+
+    h1 {
+        font-family: 'Roboto Slab', serif !important;
+        font-weight: 900;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="cont">
+        <div class="list-head">
+            <h1><i class="fa fa-user"></i> Profile</h1>
+        </div>
+        <p>Account Type: <span class="w3-tag w3-blue w3-round-xxlarge">{{ user.type }}</span></p>
+        <form action="" method="POST">
+            <div class="text-box">
+                <span>First Name:</span>
+                <input type="text" name="first_name" value="{{ user.first_name }}" required>
+            </div>
+            <div class="text-box">
+                <span>Last Name:</span>
+                <input type="text" name="last_name" value="{{ user.last_name }}" required>
+            </div>
+            <div class="text-box">
+                <span>Gender:</span>
+                <select name="gender" value="{{ user.gender }}">
+                    <option value="MALE" {% if user.gender=='MALE' %}selected{% endif %}>MALE</option>
+                    <option value="FEMALE" {% if user.gender=='FEMALE' %}selected{% endif %}>FEMALE</option>
+                </select>
+            </div>
+            <div class="text-box">
+                <span>Username:</span>
+                <input type="text" name="username" value="{{ user.username }}" required>
+            </div>
+            <div class="text-box">
+                <span>Email:</span>
+                <input type="email" name="email" value="{{ user.email }}" required>
+            </div>
+            <div class="buttons">
+                <a href="/logout.php" class="w3-btn w3-text-blue w3-round-large w3-border w3-border-blue">Logout</a>
+                <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Save">
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function buildUsername() {
+        const uType = $('#type').val();
+        const fn = $('#fn').val().replace(' ', '').toLowerCase();
+        const ln = $('#ln').val().replace(' ', '').toLowerCase();
+        let username = uType === 'CLIENT' ? 'ltpmdq_' : '';
+        username += fn.substring(0, 3) + ln;
+        $('.username').val(username.toLowerCase());
+        console.log('Hahaha');
+    }
+
+    $(function () {
+        $('#fn').keydown(buildUsername);
+        $('#ln').keydown(buildUsername);
+        $('#fn').keyup(buildUsername);
+        $('#ln').keyup(buildUsername);
+        $('#type').change(buildUsername);
+        buildUsername();
+    })
+</script>
+{% endblock %}
