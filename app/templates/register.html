@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        background-color: rgb(231, 231, 231);
+    }
+
+    main {
+        padding: 100px 20px;
+    }
+
+    form {
+        border-radius: 10px;
+        width: 100%;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px;
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 50px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    form h2 {
+        font-family: 'Roboto Slab', serif !important;
+        font-weight: 800;
+        font-size: 30px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <form action="" method="POST" class="w3-white">
+        <h2><i class="fa fa-user-plus"></i> Register a client account</h2>
+        {% if error %}
+        <div class="w3-panel w3-pale-red w3-padding w3-border-left w3-border-pink">{{ error }}</div>
+        {% endif %}
+        <div class="text-box">
+            <span>Wildlife Farm/Collector's Permit No:</span>
+            <input type="text" name="wfpwcp_no" required>
+        </div>
+        <div class="text-box">
+            <span>First Name:</span>
+            <input type="text" name="first_name" id="fn" required>
+        </div>
+        <div class="text-box">
+            <span>Last Name:</span>
+            <input type="text" name="last_name" id="ln" required>
+        </div>
+        <div class="text-box">
+            <span>Gender:</span>
+            <select name="gender">
+                <option value="MALE">MALE</option>
+                <option value="FEMALE">FEMALE</option>
+            </select>
+        </div>
+        <div class="text-box">
+            <span>Username: system-generated</span>
+            <input type="text" name="username" class="username" required disabled>
+            <input type="hidden" name="username" class="username">
+        </div>
+        <div class="text-box">
+            <span>Email:</span>
+            <input type="email" name="email" class="email" required>
+        </div>
+        <div class="buttons">
+            <a href="/login.php" class="w3-btn w3-text-blue w3-round-large w3-border w3-border-blue">Login</a>
+            <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Register">
+        </div>
+    </form>
+    <input type="hidden" name="type" id="type" value="CLIENT" disabled>
+</main>
+{% endblock %}
