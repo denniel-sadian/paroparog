@@ -21,8 +21,7 @@ if (isset($_POST['submit'])) {
     $user->email = $_POST['email'];
     $user->save();
     $_SESSION['user'] = serialize($user);
-
-    exit(header('Location: /admin/wfpwcp/list.php'));
+    $CONTEXT['user'] = $user;
 }
 
 
