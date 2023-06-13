@@ -23,12 +23,12 @@ if (isset($_GET['search']) && $_GET['search'] != '') {
     $txt = $_GET['search'];
     $CONTEXT['search'] = $txt;
     $search = Search::create([
-        'username' => $txt,
-        'email' => $txt,
-        'password' => $txt,
-        'first_name' => $txt,
-        'last_name' => $txt,
-        'type' => $txt
+        'wfp_no' => $txt,
+        'wcp_no' => $txt,
+        'permitee_name' => $txt,
+        'permitee_address' => $txt,
+        'farm_name' => $txt,
+        'farm_address' => $txt,
     ], 'OR', false);
 }
 
