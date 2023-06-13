@@ -18,9 +18,8 @@ allow([UserType::ADMIN]);
 
 if (isset($_POST['submit'])) {
     $password = strtolower(str_replace('-', '', Uuid::uuid4()->toString()));
-    $_POST['password'] = $password;
-    $_POST['active'] = false;
     $user = User::create($_POST);
+    $user->set_password($password);
     $user->save();
 
     $message = "
