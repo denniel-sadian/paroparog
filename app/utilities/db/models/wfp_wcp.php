@@ -30,6 +30,7 @@ class WfpWcp {
     public $wcp_photo_link;
     public $issuance_date;
     public $expiry_date;
+    public $expired = false;
 
     static function create($fields) {
         $wfpwcp = new WfpWcp();
@@ -68,7 +69,10 @@ class WfpWcp {
 
         $statement = $conn->prepare($SQL);
         $statement->execute(create_params_for_search($search));
-        $items = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\User');
+        $items = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\WfpWcp');
+        foreach ($items as $item) {
+            $item->expired = $item->is_expired();
+        }
 
         $SQL = 'SELECT count(*) FROM '.self::TABLE;
         $SQL = $SQL.$WHERE;
@@ -193,6 +197,11 @@ class WfpWcp {
         }
 
         $conn = null;
+    }
+
+    function is_expired() {
+        $currentDate = date("Y-m-d");
+        return $this->expiry_date <= $currentDate;
     }
 
 }
