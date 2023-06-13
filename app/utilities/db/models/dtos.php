@@ -54,12 +54,14 @@ class Search {
     public $fields;
     public $operator;
     public $is_strict;
+    public $extra;
 
-    public static function create($fields = [], $operator = 'AND', $is_strict = true) {
+    public static function create($fields = [], $operator = 'AND', $is_strict = true, $extra = null) {
         $search = new Search();
         $search->fields = $fields;
         $search->operator = $operator;
         $search->is_strict = $is_strict;
+        $search->extra = $extra;
         return $search;
     }
 

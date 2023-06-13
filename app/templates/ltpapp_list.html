@@ -77,41 +77,63 @@
 <main>
     <div class="cont">
         <div class="list-head">
-            <h1><i class="fa fa-th-list"></i> Wildlife Farm and Collector's Permits</h1>
-            <a href="/admin/wfpwcp/create.php" class="w3-btn w3-blue w3-round-xxlarge"><i class="fa fa-plus-circle"></i>
-                Add Permits</a>
+            <h1><i class="fa fa-th-list"></i> LTP Applications</h1>
+            {% if user.type == 'CLIENT' %}
+            <a href="/ltpapplications/create.php" class="w3-btn w3-blue w3-round-xxlarge"><i
+                    class="fa fa-plus-circle"></i>
+                Create LTP Application</a>
+            {% endif %}
         </div>
         {% include 'search_box.html' %}
-        <table class="w3-table-all">
-            <tr class="head">
-                <th>WFP No:</th>
-                <th>WCP No:</th>
-                <th>Permitee</th>
-                <th>Address</th>
-                <th>Issuance Date:</th>
-                <th>Expiry Date:</th>
-                <th>Expired:</th>
-                <th>Action</th>
-            </tr>
-            {% for i in page.items %}
-            <tr>
-                <td class="emp">{{ i.wfp_no }}</td>
-                <td class="emp">{{ i.wcp_no }}</td>
-                <td>{{ i.permitee_name }}</td>
-                <td>{{ i.permitee_address }}</td>
-                <td>{{ i.issuance_date }}</td>
-                <td>{{ i.expiry_date }}</td>
-                <td>{% if i.expired %}Yes{% else %}No{% endif %}</td>
-                <td>
-                    <div class="btns">
-                        <a class="w3-btn w3-hover-green" href="/admin/wfpwcp/update.php?id={{ i.id }}">
-                            <i class="fa fa-pencil-square-o"></i>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="table-cont">
+            <div class="table-cont">
+                <table class="w3-table-all">
+                    <tr class="head">
+                        <th>Application No</th>
+                        {% if user.type != 'CLIENT' %}
+                        <th>Client</th>
+                        {% endif %}
+                        <th>Transport Address</th>
+                        <th>Transport Date</th>
+                        <th>Status</th>
+                        <th>Date Created</th>
+                        <th>Date Updated</th>
+                        <th>Date Submitted</th>
+                        <th>Date Returned</th>
+                        <th>Date Accepted</th>
+                        <th>Date Released</th>
+                        <th>Valid Until</th>
+                        <th>Action</th>
+                    </tr>
+                    {% for i in page.items %}
+                    <tr>
+                        <td class="emp">{{ i.no }}</td>
+                        {% if user.type != 'CLIENT' %}
+                        <td class="emp">{{ i.client.full_name }}</td>
+                        {% endif %}
+                        <td>{{ i.transport_address }}</td>
+                        <td>{{ i.transport_date }}</td>
+                        <td class="emp">{{ i.status }}{% if i.status == 'DRAFT' and i.remarks != '' %}/RETURNED{% endif
+                            %}</td>
+                        <td>{{ i.created_at }}</td>
+                        <td>{{ i.updated_at }}</td>
+                        <td>{{ i.submitted_at }}</td>
+                        <td>{{ i.returned_at }}</td>
+                        <td>{{ i.accepted_at }}</td>
+                        <td>{{ i.release_date }}</td>
+                        <td>{{ i.validity_date }}</td>
+                        <td>
+                            <div class="btns">
+                                <a class="w3-btn w3-hover-green" href="/ltpapplications/update.php?id={{ i.id }}">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
         {% include 'paginator.html' %}
     </div>
 </main>

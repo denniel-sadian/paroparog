@@ -3,14 +3,18 @@ namespace Models;
 
 use PDO;
 
+require_once '/var/www/utilities/context.php';
 require_once '/var/www/utilities/db/connection.php';
 require_once '/var/www/utilities/db/models/helper_functions.php';
 require_once '/var/www/utilities/db/models/dtos.php';
 require_once '/var/www/utilities/db/models/users.php';
 require_once '/var/www/utilities/db/models/transport_entries.php';
+require_once '/var/www/utilities/db/models/payment_order.php';
 
 use Models\User;
+use Models\UserType;
 use Models\TransportEntry;
+use Models\PaymentOrder;
 use DTOs\PageRequest;
 use DTOs\Page;
 use DTOs\Search;
@@ -20,9 +24,8 @@ use DTOs\Sort;
 class Status {
     const DRAFT = 'DRAFT';
     const SUBMITTED = 'SUBMITTED';
-    const RETURNED = 'RETURNED';
+    const ACCEPTED = 'ACCEPTED';
     const RELEASED = 'RELEASED';
-    const EXPIRED = 'EXPIRED';
 }
 
 
@@ -35,23 +38,30 @@ class LtpApplication {
     public $client_id;
     public $client;
     public $permit_signatory_id;
-    public $permit_signatory;
+    public $permit_signatory = null;
+    public $permit_signature_link;
     public $issuing_personnel_id;
-    public $issuing_personnel;
     public $releasing_personnel_id;
     public $releasing_personnel;
     public $status;
     public $created_at;
     public $updated_at;
+    public $submitted_at;
+    public $accepted_at;
     public $returned_at;
-    public $remarks;
+    public $remarks = '';
+    public $issuance_date;
     public $release_date;
     public $validity_date;
     public $veterinary_quarantine_cert_link;
     public $supporting_docs_link;
     public $transport_address;
     public $transport_date;
+    public $inspection_report_link;
+
+    public $payment_order = null;
     public $transport_entries = [];
+    public $quantity = 0;
 
     function save() {
         $conn = connect();
@@ -73,7 +83,12 @@ class LtpApplication {
                 veterinary_quarantine_cert_link,
                 supporting_docs_link,
                 transport_address,
-                transport_date
+                transport_date,
+                submitted_at,
+                accepted_at,
+                issuance_date,
+                inspection_report_link,
+                permit_signature_link
             )
             VALUES (
                 :no,
@@ -91,7 +106,12 @@ class LtpApplication {
                 :veterinary_quarantine_cert_link,
                 :supporting_docs_link,
                 :transport_address,
-                :transport_date
+                :transport_date,
+                :submitted_at,
+                :accepted_at,
+                :issuance_date,
+                :inspection_report_link,
+                :permit_signature_link
             )';
 
         $UPDATE = '
@@ -111,7 +131,12 @@ class LtpApplication {
                 veterinary_quarantine_cert_link = :veterinary_quarantine_cert_link,
                 supporting_docs_link = :supporting_docs_link,
                 transport_address = :transport_address,
-                transport_date = :transport_date
+                transport_date = :transport_date,
+                submitted_at = :submitted_at,
+                accepted_at = :accepted_at,
+                issuance_date = :issuance_date,
+                inspection_report_link = :inspection_report_link,
+                permit_signature_link = :permit_signature_link
             WHERE id = :id';
 
         $statement = $statement = $conn->prepare($this->id == null ? $INSERT : $UPDATE);
@@ -132,7 +157,12 @@ class LtpApplication {
             ':veterinary_quarantine_cert_link' => $this->veterinary_quarantine_cert_link,
             ':supporting_docs_link' => $this->supporting_docs_link,
             ':transport_address' => $this->transport_address,
-            ':transport_date' => $this->transport_date
+            ':transport_date' => $this->transport_date,
+            ':submitted_at' => $this->submitted_at,
+            ':accepted_at' => $this->accepted_at,
+            ':issuance_date' => $this->issuance_date,
+            ':inspection_report_link' => $this->inspection_report_link,
+            ':permit_signature_link' => $this->permit_signature_link
         ];
         if ($this->id != null) {
             $params[':id'] = $this->id;
@@ -143,6 +173,8 @@ class LtpApplication {
         if ($this->id == null) {
             $this->id = $conn->lastInsertId();
         }
+
+        $this->fetch_related();
 
         $conn = null;
     }
@@ -159,7 +191,7 @@ class LtpApplication {
         $SQL = $SQL.$WHERE;
 
         if ($sort != null) {
-            $SQL = $SQL." order by $sort->field $sort->order";
+            $SQL = $SQL." ORDER BY $sort->field $sort->order";
         }
         if ($page_req != null) {
             $SQL = $SQL." LIMIT $page_req->size OFFSET $page_req->offset";
@@ -208,14 +240,20 @@ class LtpApplication {
         if ($this->permit_signatory_id != null) {
             $this->permit_signatory = User::get($this->permit_signatory_id);
         }
-        if ($this->issuing_personnel_id != null) {
-            $this->issuing_personnel = User::get($this->issuing_personnel_id);
-        }
         if ($this->releasing_personnel_id != null) {
             $this->releasing_personnel = User::get($this->releasing_personnel_id);
         }
 
         $this->transport_entries = TransportEntry::filter_all(Search::create(['ltpapp_id' => $this->id]));
+        foreach ($this->transport_entries as $i) {
+            $this->quantity += $i->quantity;
+        }
+
+        $payment_orders = PaymentOrder::filter(Search::create(['ltpapp_id' => $this->id]))->items;
+
+        if (count($payment_orders) > 0) {
+            $this->payment_order = $payment_orders[0];
+        }
     }
 
     function delete() {
@@ -230,6 +268,5 @@ class LtpApplication {
 
         $conn = null;
     }
-
 
 }

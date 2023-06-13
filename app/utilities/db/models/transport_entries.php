@@ -6,7 +6,7 @@ use PDO;
 require_once '/var/www/utilities/db/connection.php';
 require_once '/var/www/utilities/db/models/helper_functions.php';
 require_once '/var/www/utilities/db/models/dtos.php';
-require_once '/var/www/utilities/db/models/ltpapplication.php';
+require_once '/var/www/utilities/db/models/ltpapplications.php';
 require_once '/var/www/utilities/db/models/butterflies.php';
 
 use Models\User;

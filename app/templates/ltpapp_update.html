@@ -46,6 +46,24 @@
             </h1>
         </div>
         <form action="" method="POST" enctype="multipart/form-data">
+
+            {% if user.id == item.client.id %}
+
+            {% if item.status == 'DRAFT' and item.remarks != '' %}
+            <div class="w3-panel w3-padding w3-pale-red w3-round-large">
+                <h4>Admin Remarks:</h4>
+                <p>{{ item.remarks }}</p>
+            </div>
+            {% endif %}
+
+            {% endif %}
+
+            {% if user.type != 'CLIENT' %}
+            <div class="text-box">
+                <span>Client:</span>
+                <input type="text" value="{{ item.client.full_name }}" disabled>
+            </div>
+            {% endif %}
             <div class="text-box">
                 <span>Transport Desination Address:</span>
                 <input type="text" name="transport_address" value="{{ item.transport_address }}" required>
@@ -72,14 +90,148 @@
                     current</a>
                 {% endif %}
             </div>
-            <div class="buttons">
-                <a href="/admin/wfpwcp/list.php"
-                    class="w3-btn w3-text-blue w3-round-large w3-border w3-border-blue">Back</a>
-                <a href="/admin/wfpwcp/delete.php?id{{ item.id }}"
-                    class="w3-btn w3-text-red w3-round-large w3-border w3-border-red">Delete</a>
-                <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Save">
+
+            <div class="file-input">
+                <span>Inspection Report:</span>
+                {% if user.type != 'CLIENT' %}
+                <input type="file" name="inspection_report">
+                {% endif %}
+                {% if item.inspection_report_link %}
+                <a href="{{ item.inspection_report_link }}" target="_blank"><i class="fa fa-external-link"></i>
+                    View current</a>
+                {% endif %}
             </div>
+
+            {% if user.type == 'PERMIT_SIGNATORY' %}
+            <div class="file-input">
+                <span>Permit Signature:</span>
+                <input type="file" name="permit_signature">
+                {% if item.permit_signature_link %}
+                <a href="{{ item.permit_signature_link }}" target="_blank"><i class="fa fa-external-link"></i>
+                    View current</a>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if user.type == 'RELEASING_PERSONNEL' %}
+            <div class="text-box">
+                <span>Validity Date:</span>
+                <input type="date" name="validity_date" value="{{ item.validity_date }}">
+            </div>
+            {% endif %}
+
+            {% if item.status != 'RELEASED' %}
+            <div class="buttons">
+                {% if item.status == 'DRAFT' and user.id == item.client.id %}
+                <a href="/ltpapplications/delete.php?id{{ item.id }}"
+                    class="w3-btn w3-text-red w3-round-large w3-border w3-border-red">Delete</a>
+                {% endif %}
+
+                {% if (item.status == 'DRAFT' and user.id == item.client.id) or (user.type != 'CLIENT' and user.type !=
+                'PAYMENT_SIGNATORY') or user.type == 'ADMIN' %}
+                <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Save">
+                {% endif %}
+
+                {% if item.status == 'DRAFT' and user.id == item.client.id %}
+                <a href="/ltpapplications/submit.php?id{{ item.id }}" class="w3-btn w3-round-large w3-green">Submit</a>
+                {% endif %}
+
+                {% if item.status == 'SUBMITTED' and user.type == 'ADMIN' %}
+                <a href="/ltpapplications/accept.php?id{{ item.id }}" class="w3-btn w3-round-large w3-green">Accept</a>
+                {% endif %}
+
+                {% if item.status == 'ACCEPTED' and user.type == 'ADMIN' and item.payment_order == null %}
+                <a href="/ltpapplications/unaccept.php?id={{ item.id }}"
+                    class="w3-btn w3-round-large w3-pink">Unaccept</a>
+                <a href="/ltpapplications/generate_order_of_payment.php?id={{ item.id }}"
+                    class="w3-btn w3-round-large w3-green">Generate
+                    Order of Payment</a>
+                {% endif %}
+            </div>
+            {% endif %}
         </form>
+
+        {% if item.permit_signatory != null and user.type != 'PERMIT_SIGNATORY' %}
+        <div class="w3-panel w3-padding w3-margin-top w3-pale-blue w3-round-large">
+            <h4 class="w3-text-blue">Permit Signature</h4>
+            <p>Signed by permit signatory: <a href="{{ item.permit_signature_link }}" target="_blank">{{
+                    item.permit_signatory.full_name }}</a></p>
+        </div>
+        {% endif %}
+
+        {% if item.payment_order %}
+        <div class="w3-panel w3-padding w3-margin-top w3-pale-green w3-round-large">
+            <h4 class="w3-text-green">Order of Payment</h4>
+
+            {% if user.type != 'PAYMENT_SIGNATORY' %}
+            <div>
+                {% if item.payment_order.amount != 0 %}
+                <p>Amount: ₱{{ item.payment_order.amount }}</p>
+                {% else %}
+                <p>The amount is to be entered by the payment signatory.</p>
+                {% endif %}
+
+                {% if item.payment_order.payment_signatory != null %}
+                <p>Signed by payment signatory: <a href="{{ item.payment_order.signature_link }}" target="_blank">
+                        {{ item.payment_order.payment_signatory.full_name }}</a></p>
+                {% else %}
+                <p>No signature from a payment signatory yet.</p>
+                {% endif %}
+
+                {% if item.payment_order.or_no != null %}
+                <p>Official Receipt: <a href="{{ item.payment_order.or_link }}" target="_blank">{{
+                        item.payment_order.or_no }}</a></p>
+                {% endif %}
+
+                {% if user.id == item.client.id and item.payment_order.payment_signatory != null %}
+                <form action="/payments/upload_or.php?id={{ item.payment_order.id }}" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="text-box">
+                        <span>Official Receipt No:</span>
+                        <input type="text" name="or_no" value="{{ item.payment_order.or_no }}" required>
+                    </div>
+                    <div class="file-input">
+                        <span>Official Receipt:</span>
+                        <input type="file" name="or">
+                        {% if item.payment_order.or_link %}
+                        <a href="{{ item.payment_order.or_link }}" target="_blank"><i class="fa fa-external-link"></i>
+                            View current</a>
+                        {% endif %}
+                    </div>
+                    {% if item.status != 'RELEASED' %}
+                    <div class="buttons">
+                        <input type="submit" class="w3-btn w3-green w3-round-large" name="submit"
+                            value="Update Payment">
+                    </div>
+                    {% endif %}
+                </form>
+                {% endif %}
+            </div>
+            {% else %}
+            <form action="/payments/update.php?id={{ item.payment_order.id }}" method="POST"
+                enctype="multipart/form-data">
+                <div class="text-box">
+                    <span>Payment Amount:</span>
+                    <input type="number" name="amount" min="1" value="{{ item.payment_order.amount }}" required>
+                </div>
+                <div class="file-input">
+                    <span>Upload Signature:</span>
+                    <input type="file" name="signature">
+                    {% if item.payment_order.signature_link %}
+                    <a href="{{ item.payment_order.signature_link }}" target="_blank"><i
+                            class="fa fa-external-link"></i>
+                        View current</a>
+                    {% endif %}
+                </div>
+                <div class="buttons">
+                    <input type="submit" class="w3-btn w3-green w3-round-large" name="submit" value="Save">
+                </div>
+            </form>
+            {% endif %}
+
+        </div>
+        {% endif %}
+
         <form action="/ltpapplications/transportentries/create.php" method="POST" class="entryform">
             <h4>Transport Entries</h4>
             <table class="w3-table-all">
@@ -87,23 +239,28 @@
                     <th>Common/Scientific Name</th>
                     <th>Description</th>
                     <th>Quantity</th>
+                    {% if user.id == item.client.id and item.status == 'DRAFT' %}
                     <th>Action</th>
+                    {% endif %}
                 </tr>
                 {% for i in item.transport_entries %}
                 <tr>
-                    <td class="emp">{{ i.animal.specie_type }}</td>
+                    <td class="emp">{{ i.animal.common_name }}/{{ i.animal.scientific_name }}</td>
                     <td>{{ i.description }}</td>
                     <td>{{ i.quantity }}</td>
+                    {% if user.id == item.client.id and item.status == 'DRAFT' %}
                     <td><a href="/ltpapplications/transportentries/delete.php?id={{ i.id }}" class="w3-text-red"><i
                                 class="fa fa-trash-o"></i> Delete</a></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </table>
+            {% if user.id == item.client.id and item.status == 'DRAFT' %}
             <div class="text-box">
                 <span>Butterfly:</span>
                 <select name="animal_id" required>
                     {% for i in animals %}
-                    <option value="{{ i.id }}">{{ i.specie_type }} - {{ i.class_name }} - {{ i.family_name }}</option>
+                    <option value="{{ i.id }}">{{ i.common_name }}/{{ i.scientific_name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -119,7 +276,29 @@
             <div class="buttons">
                 <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Add">
             </div>
+            {% endif %}
         </form>
+
+        {% if (item.status == 'SUBMITTED' or item.status == 'DRAFT') and user.type == 'ADMIN' %}
+        <form action="/ltpapplications/return.php?id={{ item.id }}" method="POST"
+            class="w3-panel w3-pale-red w3-padding w3-round-large" disable>
+            <div class="text-box">
+                <span>Remarks:</span>
+                <input type="text" name="remarks" value="{{ item.remarks }}" required>
+            </div>
+            <div class="buttons">
+                <input type="submit" class="w3-btn w3-pink w3-round-large" name="submit" value="Return">
+            </div>
+        </form>
+        {% endif %}
+        <div class="buttons">
+            <a href="/ltpapplications/list.php?page=1"
+                class="w3-btn w3-text-gray w3-round-large w3-border w3-border-gray">Back</a>
+            {% if item.status == 'RELEASED' %}
+            <a href="/ltpapplications/generate.php?id={{ item.id }}" target="_blank"
+                class="w3-btn w3-green w3-round-large">Download Permit</a>
+            {% endif %}
+        </div>
     </div>
 </main>
 {% endblock %}

@@ -1,5 +1,7 @@
 <?php
 function create_where_clause_for_search($search) {
+    $where = '';
+
     if ($search->fields != null && count($search->fields) != 0) {
         $clauses = [];
         foreach ($search->fields as $field => $str_search) {
@@ -10,9 +12,17 @@ function create_where_clause_for_search($search) {
             }
         }
         $where = ' WHERE '.implode(" $search->operator ", $clauses);
-        return $where;
     }
-    return '';
+
+    if ($search->extra != null) {
+        if (strpos($where, 'WHERE') !== false) {
+            $where = $where.' AND '.$search->extra;
+        } else {
+            $where = ' WHERE '.$search->extra;
+        }
+    }
+
+    return $where;
 }
 
 

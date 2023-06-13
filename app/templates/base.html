@@ -4,7 +4,7 @@
 <head>
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="/media/static/css/w3.css" />
-    <link rel="stylesheet" href="/media/static/css/global.css?v=20" />
+    <link rel="stylesheet" href="/media/static/css/global.css?v=22" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -28,26 +28,28 @@
                 <span>Butterfly LTP System</span>
             </a>
             <div class="links">
-                {% if user != null and user.type == 'ADMIN' %}
+                {% if user != null %}
+                <a href="/ltpapplications/list.php?page=1"
+                    class="{% if tab == 'ltpapplications' %}current-tab{% endif %}">
+                    LTP Applications</a>
+                {% endif %}
+
+                {% if user.type == 'ADMIN' %}
                 <a href="/admin/butterflies/list.php?page=1"
                     class="{% if tab == 'butterflies' %}current-tab{% endif %}">Butterflies</a>
                 <a href="/admin/wfpwcp/list.php?page=1" class="{% if tab == 'wfpwcp' %}current-tab{% endif %}">WFP &
                     WCP</a>
                 <a href="/admin/users/list.php?page=1" class="{% if tab == 'users' %}current-tab{% endif %}">Users</a>
-                {% elseif user != null and user.type == 'CLIENT' %}
-                <a href="/ltpapplications/list.php?page=1"
-                    class="{% if tab == 'ltpapplications' %}current-tab{% endif %}">LTP
-                    Applications</a>
+                {% endif %}
+
+                {% if user == null %}
+                <a href="/login.php" class="name {% if tab == 'login' %}current-tab{% endif %}">Login</a>
+                <a href="/register.php" class="name {% if tab == 'register' %}current-tab{% endif %}">Register</a>
                 {% endif %}
 
                 {% if user %}
                 <a href="/profile/details.php" class="name {% if tab == 'profile' %}current-tab{% endif %}"><b><i
-                            class="fa fa-user-circle-o"></i> {{ user.first_name ~ ' ' ~
-                        user.last_name
-                        }}</b></a>
-                {% else %}
-                <a href="/login.php" class="name {% if tab == 'login' %}current-tab{% endif %}">Login</a>
-                <a href="/register.php" class="name {% if tab == 'register' %}current-tab{% endif %}">Register</a>
+                            class="fa fa-user-circle-o"></i> {{ user.full_name }}</b></a>
                 {% endif %}
             </div>
         </div>

@@ -27,7 +27,7 @@
 
     .butterfly .details {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr auto;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto;
         padding: 10px 20px;
     }
 
@@ -96,6 +96,14 @@
                 <span>Family Name:</span>
                 <input type="text" name="family_name" required>
             </div>
+            <div class="text-box">
+                <span>Common Name:</span>
+                <input type="text" name="common_name" required>
+            </div>
+            <div class="text-box">
+                <span>Scientific Name:</span>
+                <input type="text" name="scientific_name" required>
+            </div>
             <div class="buttons">
                 <button class="w3-btn w3-text-blue w3-border w3-border-blue w3-round-xxlarge"
                     onclick="event.preventDefault(); $('#creation-form').fadeToggle();">Close</button>
@@ -118,6 +126,14 @@
                     <label>Family Name:</label>
                     <span>{{ i.family_name }}</span>
                 </div>
+                <div class="inf">
+                    <label>Common Name:</label>
+                    <span>{{ i.common_name }}</span>
+                </div>
+                <div class="inf">
+                    <label>Scientific Name:</label>
+                    <span>{{ i.scientific_name }}</span>
+                </div>
                 <div class="btns">
                     <button class="w3-btn w3-hover-green" onclick="edit('{{ i.id }}');">
                         <i class="fa fa-pencil-square-o"></i>
@@ -137,6 +153,14 @@
                 <div class="text-box">
                     <span>Family Name:</span>
                     <input type="text" name="family_name" value="{{ i.family_name }}" required>
+                </div>
+                <div class="text-box">
+                    <span>Common Name:</span>
+                    <input type="text" name="common_name" value="{{ i.common_name }}" required>
+                </div>
+                <div class="text-box">
+                    <span>Scientific Name:</span>
+                    <input type="text" name="scientific_name" value="{{ i.scientific_name }}" required>
                 </div>
                 <div class="buttons">
                     <a href="/admin/butterflies/delete.php?id={{ i.id }}"

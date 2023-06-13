@@ -15,6 +15,8 @@ if (isset($_POST['submit']) && isset($_GET['id'])) {
     $butterfly->specie_type = $_POST['specie_type'];
     $butterfly->class_name = $_POST['class_name'];
     $butterfly->family_name = $_POST['family_name'];
+    $butterfly->common_name = $_POST['common_name'];
+    $butterfly->scientific_name = $_POST['scientific_name'];
     $butterfly->save();
 }
 

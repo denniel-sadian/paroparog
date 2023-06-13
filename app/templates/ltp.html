@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ ltp.no }}</title>
+    <style>
+        main {
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        strong {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            text-align: center;
+            border-top: 2px dashed gray;
+            border-bottom: 2px dashed gray;
+        }
+
+        .sig-line {
+            display: grid;
+            grid-template-columns: 1fr auto;
+        }
+
+        .sig {
+            width: 250px;
+            height: 200px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex-direction: column;
+            background-image: url("{{ ltp.permit_signature_link }}");
+            background-position: bottom;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        img {
+            margin-top: 100px;
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h4>Wildlife Transport <br>
+            Permit No: {{ ltp.no }}</h4>
+        <h2 style="text-align: center">LOCAL TRANSPORT PERMIT</h2>
+        <p style="text-indent: 50px;">Pursuant ot Republic Act 9147 dated July 30, 2001, <strong>{{ ltp.client.full_name
+                }}</strong> of <strong>{{ ltp.client.address }}</strong> is authorized to transport to <strong>{{
+                ltp.transport_address }}</strong> the following wildlife for <strong>export</strong> purpose.</p>
+        <table>
+            <tr>
+                <th>Common/Scientific Name</th>
+                <th>Description</th>
+                <th>Quantity</th>
+            </tr>
+            {% for i in ltp.transport_entries %}
+            <tr>
+                <td>{{ i.animal.common_name }}/{{ i.animal.scientific_name }}</td>
+                <td>{{ i.description }}</td>
+                <td>{{ i.quantity }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td><b>Total: {{ ltp.quantity }}</b></td>
+            </tr>
+        </table>
+        <p style="text-indent: 50px;">The above-mentioned specimens shall be transported by Air/Seaexpress on or
+            before <strong>{{ ltp.transport_date }}</strong> and have been inspected, verified and found ni accordance
+            with
+            existing wildlife laws, rules and regulations.
+        </p>
+        <p style="text-indent: 50px;">Local transport fee in the amount of <strong>₱ {{ ltp.payment_order.amount
+                }}</strong> was paid under the DENR PENRO Official Receipt No.
+            <strong>{{ ltp.payment_order.or_no }}</strong> dated <strong>{{ ltp.updated_at }}</strong>.
+        </p>
+        <p style="text-indent: 50px;">This is to certifyfurther that this statement wasgiven me voluntarily and with
+            neither coercion nor promise of reward from the personnelofthe Department of Environment and Natural
+            Resources.</strong>
+        </p>
+        <div class="sig-line">
+            <div></div>
+            <div class="sig">
+                <span><b>{{ ltp.permit_signatory.first_name }} {{ ltp.permit_signatory.last_name }}</b></span>
+                <span>OIC - PENR Officer</span>
+            </div>
+        </div>
+        <img src="{{ ltp.inspection_report_link }}">
+        <img src="{{ ltp.client.wfpwcp.wfp_photo_link }}">
+        <img src="{{ ltp.client.wfpwcp.wcp_photo_link }}">
+    </main>
+</body>
+
+</html>

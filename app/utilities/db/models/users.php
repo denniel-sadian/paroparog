@@ -18,14 +18,12 @@ class UserType {
     const ADMIN = 'ADMIN';
     const PAYMENT_SIGNATORY = 'PAYMENT_SIGNATORY';
     const PERMIT_SIGNATORY = 'PERMIT_SIGNATORY';
-    const ISSUING_PERSONNEL = 'ISSUING_PERSONNEL';
     const RELEASING_PERSONNEL = 'RELEASING_PERSONNEL';
     const ALL = [
         self::CLIENT,
         self::ADMIN,
         self::PAYMENT_SIGNATORY,
         self::PERMIT_SIGNATORY,
-        self::RELEASING_PERSONNEL,
         self::RELEASING_PERSONNEL
     ];
 }
@@ -52,9 +50,11 @@ class User {
     public $created_at;
     public $active;
     public $password_changed;
-
     public $wfpwcp_id;
+    public $address;
+
     public $wfpwcp;
+    public $full_name;
 
     static function create($fields) {
         $user = new User();
@@ -66,6 +66,7 @@ class User {
         $user->type = $fields['type'];
         $user->active = true;
         $user->password_changed = false;
+        $user->address = $fields['address'];
 
         $user->wfpwcp_id = isset($fields['wfpwcp_id']) ? $fields['wfpwcp_id'] : null;
 
@@ -94,9 +95,7 @@ class User {
         $statement->execute(create_params_for_search($search));
         $items = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\User');
         foreach ($items as $item) {
-            if ($item->wfpwcp_id != null) {
-                $item->wfpwcp = WfpWcp::get($item->wfpwcp_id);
-            }
+            $item->compute_properties();
         }
 
         $SQL = 'SELECT count(*) FROM '.self::TABLE;
@@ -121,6 +120,7 @@ class User {
         $statement = $conn->prepare($SELECT_ONE);
         $statement->execute([':id' => $id]);
         $obj = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\User')[0];
+        $obj->compute_properties();
 
         $conn = null;
 
@@ -141,7 +141,8 @@ class User {
                 type,
                 active,
                 password_changed,
-                wfpwcp_id
+                wfpwcp_id,
+                address
             )
             VALUES (
                 :username,
@@ -153,7 +154,8 @@ class User {
                 :type,
                 :active,
                 :password_changed,
-                :wfpwcp_id
+                :wfpwcp_id,
+                :address
             )';
 
         $UPDATE = '
@@ -168,7 +170,8 @@ class User {
                 type = :type,
                 active = :active,
                 password_changed = :password_changed,
-                wfpwcp_id = :wfpwcp_id
+                wfpwcp_id = :wfpwcp_id,
+                address = :address
             WHERE id = :id';
 
         $statement = $statement = $conn->prepare($this->id == null ? $INSERT : $UPDATE);
@@ -183,6 +186,7 @@ class User {
         $statement->bindParam(':active', $this->active, PDO::PARAM_BOOL);
         $statement->bindParam(':password_changed', $this->password_changed, PDO::PARAM_BOOL);
         $statement->bindParam(':wfpwcp_id', $this->wfpwcp_id);
+        $statement->bindParam(':address', $this->address);
         if ($this->id != null) {
             $statement->bindParam(':id', $this->id, PDO::PARAM_INT);
         }
@@ -193,7 +197,18 @@ class User {
             $this->id = $conn->lastInsertId();
         }
 
+        $this->compute_properties();
+
         $conn = null;
+    }
+
+    function compute_properties() {
+        $salutation = $this->gender == Gender::MALE ? 'Mr.' : 'Ms.';
+        $this->full_name = $salutation.' '.$this->first_name.' '.$this->last_name;
+
+        if ($this->wfpwcp_id != null) {
+            $this->wfpwcp = WfpWcp::get($this->wfpwcp_id);
+        }
     }
 
     function delete() {

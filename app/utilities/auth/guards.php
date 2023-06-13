@@ -10,7 +10,9 @@ function allow($types) {
             exit(header('Location: /profile/update_password.php'));
         }
 
-        if (!in_array($user->type, $types)) {
+        //echo $user->type;
+        //var_dump(!in_array($user->type, $types));
+        if (!(in_array($user->type, $types))) {
             exit(header('Location: /forbidden.php'));
         }
     } else {
@@ -21,11 +23,6 @@ function allow($types) {
 function redirect() {
     if (isset($_SESSION['user'])) {
         $user = unserialize($_SESSION['user']);
-
-        if ($user->type == Models\UserType::CLIENT) {
-            exit(header('Location: /ltpapplications/list.php'));
-        } elseif ($user->type == Models\UserType::ADMIN) {
-            exit(header('Location: /admin/butterflies/list.php'));
-        }
+        exit(header('Location: /ltpapplications/list.php'));
     }
 }
