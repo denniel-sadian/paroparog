@@ -89,8 +89,6 @@ class WfpWcp {
     }
 
     static function get($id) {
-        global $TABLE;
-
         $conn = connect();
 
         $SELECT_ONE = 'SELECT * FROM '.self::TABLE.' where id = :id';
@@ -105,8 +103,6 @@ class WfpWcp {
     }
 
     function save() {
-        global $TABLE;
-
         $conn = connect();
 
         $INSERT = '
@@ -185,8 +181,6 @@ class WfpWcp {
     }
 
     function delete() {
-        global $TABLE;
-
         $conn = connect();
 
         $DELETE = 'DELETE FROM '.self::TABLE.' WHERE id = :id';

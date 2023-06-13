@@ -1,32 +1,78 @@
 <?php
 namespace Models;
 
+use PDO;
+
 require_once '/var/www/utilities/db/connection.php';
 require_once '/var/www/utilities/db/models/helper_functions.php';
 require_once '/var/www/utilities/db/models/dtos.php';
+require_once '/var/www/utilities/db/models/ltpapplication.php';
+require_once '/var/www/utilities/db/models/butterflies.php';
 
-use PDO;
+use Models\User;
+use Models\Butterfly;
+use Models\LtpApplication;
 use DTOs\PageRequest;
 use DTOs\Page;
 use DTOs\Search;
 use DTOs\Sort;
 
 
-class Butterfly {
+class TransportEntry {
 
-    const TABLE = 'butterflies';
+    const TABLE = 'transport_entries';
 
     public $id;
-    public $specie_type;
-    public $class_name;
-    public $family_name;
+    public $animal_id;
+    public $animal;
+    public $ltpapp_id;
+    public $description;
+    public $quantity;
 
-    static function create($fields) {
-        $butterfly = new Butterfly();
-        $butterfly->specie_type = $fields['specie_type'];
-        $butterfly->class_name = $fields['class_name'];
-        $butterfly->family_name = $fields['family_name'];
-        return $butterfly;
+    function save() {
+        $conn = connect();
+
+        $INSERT = '
+            INSERT INTO '.self::TABLE.' (
+                animal_id,
+                ltpapp_id,
+                description,
+                quantity
+            )
+            VALUES (
+                :animal_id,
+                :ltpapp_id,
+                :description,
+                :quantity
+            )';
+
+        $UPDATE = '
+            UPDATE '.self::TABLE.' SET
+                animal_id = :animal_id,
+                ltpapp_id = :ltpapp_id,
+                description = :description,
+                quantity = :quantity
+            WHERE id = :id';
+
+        $statement = $statement = $conn->prepare($this->id == null ? $INSERT : $UPDATE);
+
+        $params = [
+            ':animal_id' => $this->animal_id,
+            ':ltpapp_id' => $this->ltpapp_id,
+            ':description' => $this->description,
+            ':quantity' => $this->quantity
+        ];
+        if ($this->id != null) {
+            $params[':id'] = $this->id;
+        }
+
+        $statement->execute($params);
+
+        if ($this->id == null) {
+            $this->id = $conn->lastInsertId();
+        }
+
+        $conn = null;
     }
 
     static function filter(Search $search = null, Sort $sort = null, PageRequest $page_req = null) {
@@ -49,7 +95,10 @@ class Butterfly {
 
         $statement = $conn->prepare($SQL);
         $statement->execute(create_params_for_search($search));
-        $items = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\Butterfly');
+        $items = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\TransportEntry');
+        foreach ($items as $item) {
+            $item->fetch_related();
+        }
 
         $SQL = 'SELECT count(*) FROM '.self::TABLE;
         $SQL = $SQL.$WHERE;
@@ -79,53 +128,18 @@ class Butterfly {
 
         $statement = $conn->prepare($SELECT_ONE);
         $statement->execute([':id' => $id]);
-        $obj = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\Butterfly')[0];
+        $obj = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\TransportEntry')[0];
+        $obj->fetch_related();
 
         $conn = null;
 
         return $obj;
     }
 
-    function save() {
-        $conn = connect();
-
-        $INSERT = '
-            INSERT INTO '.self::TABLE.' (
-                specie_type,
-                class_name,
-                family_name
-            )
-            VALUES (
-                :specie_type,
-                :class_name,
-                :family_name
-            )';
-
-        $UPDATE = '
-            UPDATE '.self::TABLE.' SET
-                specie_type = :specie_type,
-                class_name = :class_name,
-                family_name = :family_name
-            WHERE id = :id';
-
-        $statement = $statement = $conn->prepare($this->id == null ? $INSERT : $UPDATE);
-
-        $params = [
-            ':specie_type' => $this->specie_type,
-            ':class_name' => $this->class_name,
-            ':family_name' => $this->family_name
-        ];
-        if ($this->id != null) {
-            $params[':id'] = $this->id;
+    function fetch_related() {
+        if ($this->animal_id != null) {
+            $this->animal = Butterfly::get($this->animal_id);
         }
-
-        $statement->execute($params);
-
-        if ($this->id == null) {
-            $this->id = $conn->lastInsertId();
-        }
-
-        $conn = null;
     }
 
     function delete() {
@@ -140,5 +154,6 @@ class Butterfly {
 
         $conn = null;
     }
+
 
 }

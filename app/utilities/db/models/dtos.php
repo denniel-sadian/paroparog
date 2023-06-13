@@ -8,7 +8,7 @@ class PageRequest {
     public $size;
     public $offset;
 
-    public static function create($number = 0, $size = 2) {
+    public static function create($number = 0, $size = 10) {
         $page_req = new PageRequest();
         $page_req->number = $number;
         $page_req->size = $size;
@@ -36,8 +36,8 @@ class Page {
         $page->size = $size;
         $page->total_items = $total_items;
 
-        $total_pages = $total_items / $size;
-        if (($total_items % $size) != 0) $total_pages++;
+        $total_pages = $size != 0 ? $total_items / $size : 0;
+        if ($size != 0 && ($total_items % $size) != 0) $total_pages++;
         $page->total_pages = (int) $total_pages;
 
         if (($number - 1) >= 0) $page->prev_page = $number - 1;
