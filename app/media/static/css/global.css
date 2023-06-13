@@ -198,3 +198,13 @@ footer .cont h2 {
     grid-template-columns: 1fr auto;
     align-items: center;
 }
+
+table {
+    width: 100%;
+}
+table th,
+table .emp {
+    font-family: 'Roboto Slab', serif !important;
+    text-align: left;
+    font-weight: bold;
+}
