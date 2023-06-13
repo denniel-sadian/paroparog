@@ -11,7 +11,7 @@ function allow($types) {
         }
 
         if (!in_array($user->type, $types)) {
-        exit(header('Location: /forbidden.php'));
+            exit(header('Location: /forbidden.php'));
         }
     } else {
         exit(header('Location: /login.php'));
@@ -23,7 +23,7 @@ function redirect() {
         $user = unserialize($_SESSION['user']);
 
         if ($user->type == Models\UserType::CLIENT) {
-
+            exit(header('Location: /ltpapplications/list.php'));
         } elseif ($user->type == Models\UserType::ADMIN) {
             exit(header('Location: /admin/butterflies/list.php'));
         }
