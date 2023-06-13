@@ -34,7 +34,10 @@
                 <a href="/admin/wfpwcp/list.php?page=1" class="{% if tab == 'wfpwcp' %}current-tab{% endif %}">WFP &
                     WCP</a>
                 <a href="/admin/users/list.php?page=1" class="{% if tab == 'users' %}current-tab{% endif %}">Users</a>
-                {% else %}
+                {% elseif user != null and user.type == 'CLIENT' %}
+                <a href="/ltpapplications/list.php?page=1"
+                    class="{% if tab == 'ltpapplications' %}current-tab{% endif %}">LTP
+                    Applications</a>
                 {% endif %}
 
                 {% if user %}
@@ -58,19 +61,7 @@
         </footer>
     </div>
     {% block scripts %}{% endblock %}
-    <script>
-        $(function () {
-            [...document.querySelectorAll('a')].forEach(e => {
-                const url = new URL(e.href);
-                for (let [k, v] of new URLSearchParams(window.location.search).entries()) {
-                    if (url.searchParams.get(k) == null) {
-                        url.searchParams.set(k, v);
-                    }
-                }
-                e.href = url.toString();
-            });
-        });
-    </script>
+    <script src="/media/static/js/global.js?v=1"></script>
 </body>
 
 </html>
