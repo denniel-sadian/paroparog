@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}LTP Application{% endblock %}
+
+{% block styles %}
+<style>
+    main {
+        padding: 100px 20px;
+    }
+
+    main .cont {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 600px;
+    }
+
+    h1,
+    h4 {
+        font-family: 'Roboto Slab', serif !important;
+        font-weight: 900;
+    }
+
+    .entryform {
+        margin-top: 25px;
+        border: 2px solid rgb(234, 234, 234);
+        border-radius: 8px;
+        padding: 20px;
+    }
+
+    .entryform table {
+        margin: 10px 0px;
+        padding: 10px 0px;
+        border-top: 2px solid rgb(234, 234, 234);
+        border-bottom: 2px solid rgb(234, 234, 234);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="cont">
+        <div class="list-head">
+            <h1><i class="fa fa-file-text-o"></i> {{ item.no }} <span
+                    class="w3-small w3-text-white w3-tag w3-gray w3-round-xxlarge">{{
+                    item.status }}</span>
+            </h1>
+        </div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="text-box">
+                <span>Transport Desination Address:</span>
+                <input type="text" name="transport_address" value="{{ item.transport_address }}" required>
+            </div>
+            <div class="text-box">
+                <span>Transport Date:</span>
+                <input type="date" name="transport_date" value="{{ item.transport_date }}" required>
+            </div>
+            <div class="file-input">
+                <span>Veterinary Quarantine Certificate:</span>
+                <input type="file" name="veterinary_quarantine_cert">
+                {% if item.veterinary_quarantine_cert_link %}
+                <a href="{{ item.veterinary_quarantine_cert_link }}" target="_blank"><i class="fa fa-external-link"></i>
+                    View
+                    current</a>
+                {% endif %}
+            </div>
+            <div class="file-input">
+                <span>Documents supporting the legal possesion/acquisition of wildlife:</span>
+                <input type="file" name="supporting_docs">
+                {% if item.supporting_docs_link %}
+                <a href="{{ item.supporting_docs_link }}" target="_blank"><i class="fa fa-external-link"></i>
+                    View
+                    current</a>
+                {% endif %}
+            </div>
+            <div class="buttons">
+                <a href="/admin/wfpwcp/list.php"
+                    class="w3-btn w3-text-blue w3-round-large w3-border w3-border-blue">Back</a>
+                <a href="/admin/wfpwcp/delete.php?id{{ item.id }}"
+                    class="w3-btn w3-text-red w3-round-large w3-border w3-border-red">Delete</a>
+                <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Save">
+            </div>
+        </form>
+        <form action="/ltpapplications/transportentries/create.php" method="POST" class="entryform">
+            <h4>Transport Entries</h4>
+            <table class="w3-table-all">
+                <tr>
+                    <th>Common/Scientific Name</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Action</th>
+                </tr>
+                {% for i in item.transport_entries %}
+                <tr>
+                    <td class="emp">{{ i.animal.specie_type }}</td>
+                    <td>{{ i.description }}</td>
+                    <td>{{ i.quantity }}</td>
+                    <td><a href="/ltpapplications/transportentries/delete.php?id={{ i.id }}" class="w3-text-red"><i
+                                class="fa fa-trash-o"></i> Delete</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+            <div class="text-box">
+                <span>Butterfly:</span>
+                <select name="animal_id" required>
+                    {% for i in animals %}
+                    <option value="{{ i.id }}">{{ i.specie_type }} - {{ i.class_name }} - {{ i.family_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="hidden" name="ltpapp_id" value="{{ item.id }}" required>
+            <div class="text-box">
+                <span>Quantity:</span>
+                <input type="number" name="quantity" min="1" required>
+            </div>
+            <div class="text-box">
+                <span>Description:</span>
+                <input type="text" name="description" required>
+            </div>
+            <div class="buttons">
+                <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Add">
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+</script>
+{% endblock %}

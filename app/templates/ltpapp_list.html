@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}LTP Applications{% endblock %}
+
+{% block styles %}
+<style>
+    main {
+        padding: 100px 20px;
+    }
+
+    main .cont {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 1100px;
+    }
+
+    h1 {
+        font-family: 'Roboto Slab', serif !important;
+        font-weight: 900;
+    }
+
+    .item {
+        width: 100%;
+        border-bottom: 2px solid rgb(205, 205, 205);
+        margin-bottom: 8px;
+    }
+
+    .item .details {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr auto;
+        padding: 10px 20px;
+    }
+
+    .inf {
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+    }
+
+    .inf label {
+        font-size: 12px;
+    }
+
+    .inf span {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .btns {
+        display: flex;
+    }
+
+    .btns>* {
+        border-radius: 100%;
+        width: 40px;
+        height: 40px;
+        margin-left: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    table th,
+    table .emp {
+        font-family: 'Roboto Slab', serif !important;
+        text-align: left;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="cont">
+        <div class="list-head">
+            <h1><i class="fa fa-th-list"></i> Wildlife Farm and Collector's Permits</h1>
+            <a href="/admin/wfpwcp/create.php" class="w3-btn w3-blue w3-round-xxlarge"><i class="fa fa-plus-circle"></i>
+                Add Permits</a>
+        </div>
+        {% include 'search_box.html' %}
+        <table class="w3-table-all">
+            <tr class="head">
+                <th>WFP No:</th>
+                <th>WCP No:</th>
+                <th>Permitee</th>
+                <th>Address</th>
+                <th>Issuance Date:</th>
+                <th>Expiry Date:</th>
+                <th>Expired:</th>
+                <th>Action</th>
+            </tr>
+            {% for i in page.items %}
+            <tr>
+                <td class="emp">{{ i.wfp_no }}</td>
+                <td class="emp">{{ i.wcp_no }}</td>
+                <td>{{ i.permitee_name }}</td>
+                <td>{{ i.permitee_address }}</td>
+                <td>{{ i.issuance_date }}</td>
+                <td>{{ i.expiry_date }}</td>
+                <td>{% if i.expired %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <div class="btns">
+                        <a class="w3-btn w3-hover-green" href="/admin/wfpwcp/update.php?id={{ i.id }}">
+                            <i class="fa fa-pencil-square-o"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% include 'paginator.html' %}
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
