@@ -4,6 +4,7 @@ namespace Models;
 require_once "/var/www/utilities/db/connection.php";
 require_once "/var/www/utilities/db/models/helper_functions.php";
 require_once '/var/www/utilities/db/models/dtos.php';
+require_once '/var/www/utilities/db/models/wfp_wcp.php';
 
 use PDO;
 use DTOs\PageRequest;
@@ -50,17 +51,22 @@ class User {
     public $active;
     public $password_changed;
 
+    public $wfpwcp_id;
+    public $wfpwcp;
+
     static function create($fields) {
         $user = new User();
         $user->username = $fields['username'];
         $user->email = $fields['email'];
-        $user->password = md5($fields['password']);
         $user->first_name = $fields['first_name'];
         $user->last_name = $fields['last_name'];
         $user->gender = $fields['gender'];
         $user->type = $fields['type'];
         $user->active = true;
         $user->password_changed = false;
+
+        $user->wfpwcp_id = $fields['wfpwcp_id'];
+
         return $user;
     }
 
@@ -85,6 +91,11 @@ class User {
         $statement = $conn->prepare($SQL);
         $statement->execute(create_params_for_search($search));
         $items = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\User');
+        foreach ($items as $item) {
+            if ($item->wfpwcp_id != null) {
+                $item->wfpwcp = WfpWcp::get($item->wfpwcp_id);
+            }
+        }
 
         $SQL = 'SELECT count(*) FROM '.self::TABLE;
         $SQL = $SQL.$WHERE;
@@ -127,7 +138,8 @@ class User {
                 gender,
                 type,
                 active,
-                password_changed
+                password_changed,
+                wfpwcp_id
             )
             VALUES (
                 :username,
@@ -138,7 +150,8 @@ class User {
                 :gender,
                 :type,
                 :active,
-                :password_changed
+                :password_changed,
+                :wfpwcp_id
             )';
 
         $UPDATE = '
@@ -152,7 +165,8 @@ class User {
                 gender = :gender,
                 type = :type,
                 active = :active,
-                password_changed = :password_changed
+                password_changed = :password_changed,
+                wfpwcp_id = :wfpwcp_id
             WHERE id = :id';
 
         $statement = $statement = $conn->prepare($this->id == null ? $INSERT : $UPDATE);
@@ -166,6 +180,7 @@ class User {
         $statement->bindParam(':type', $this->type);
         $statement->bindParam(':active', $this->active, PDO::PARAM_BOOL);
         $statement->bindParam(':password_changed', $this->password_changed, PDO::PARAM_BOOL);
+        $statement->bindParam(':wfpwcp_id', $this->wfpwcp_id);
         if ($this->id != null) {
             $statement->bindParam(':id', $this->id, PDO::PARAM_INT);
         }
