@@ -18,12 +18,14 @@ class UserType {
     const ADMIN = 'ADMIN';
     const PAYMENT_SIGNATORY = 'PAYMENT_SIGNATORY';
     const PERMIT_SIGNATORY = 'PERMIT_SIGNATORY';
+    const ISSUING_PERSONNEL = 'ISSUING_PERSONNEL';
     const RELEASING_PERSONNEL = 'RELEASING_PERSONNEL';
     const ALL = [
         self::CLIENT,
         self::ADMIN,
         self::PAYMENT_SIGNATORY,
         self::PERMIT_SIGNATORY,
+        self::RELEASING_PERSONNEL,
         self::RELEASING_PERSONNEL
     ];
 }
@@ -65,7 +67,7 @@ class User {
         $user->active = true;
         $user->password_changed = false;
 
-        $user->wfpwcp_id = $fields['wfpwcp_id'];
+        $user->wfpwcp_id = isset($fields['wfpwcp_id']) ? $fields['wfpwcp_id'] : null;
 
         return $user;
     }
