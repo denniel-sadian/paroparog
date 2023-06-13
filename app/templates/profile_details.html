@@ -18,6 +18,11 @@
         font-family: 'Roboto Slab', serif !important;
         font-weight: 900;
     }
+
+    .permits h4 {
+        font-family: 'Roboto Slab', serif !important;
+        font-weight: bold;
+    }
 </style>
 {% endblock %}
 
@@ -57,29 +62,22 @@
                 <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Save">
             </div>
         </form>
+        {% if user.wfpwcp != null %}
+        <div class="w3-panel w3-pale-blue w3-round-large permits">
+            <h4>Wildlife Farm/Collector's Permits</h4>
+            <p>WFP#: {{ user.wfpwcp.wfp_no }}</p>
+            <p>WCP#: {{ user.wfpwcp.wcp_no }}</p>
+            <p>Issuance Date: {{ user.wfpwcp.issuance_date }}</p>
+            <p>Expiry Date: {{ user.wfpwcp.expiry_date }}</p>
+            <p><a href="{{ user.wfpwcp.wfp_photo_link }}" target="_blank"><i class="fa fa-external-link"></i>
+                    Wildlife Farm Permit</a></p>
+            <p><a href="{{ user.wfpwcp.wcp_photo_link }}" target="_blank"><i class="fa fa-external-link"></i>
+                    Wildlife Collector's Permit</a></p>
+        </div>
+        {% endif %}
     </div>
 </main>
 {% endblock %}
 
 {% block scripts %}
-<script>
-    function buildUsername() {
-        const uType = $('#type').val();
-        const fn = $('#fn').val().replace(' ', '').toLowerCase();
-        const ln = $('#ln').val().replace(' ', '').toLowerCase();
-        let username = uType === 'CLIENT' ? 'ltpmdq_' : '';
-        username += fn.substring(0, 3) + ln;
-        $('.username').val(username.toLowerCase());
-        console.log('Hahaha');
-    }
-
-    $(function () {
-        $('#fn').keydown(buildUsername);
-        $('#ln').keydown(buildUsername);
-        $('#fn').keyup(buildUsername);
-        $('#ln').keyup(buildUsername);
-        $('#type').change(buildUsername);
-        buildUsername();
-    })
-</script>
 {% endblock %}
