@@ -294,7 +294,7 @@
         <div class="buttons">
             <a href="/ltpapplications/list.php?page=1"
                 class="w3-btn w3-text-gray w3-round-large w3-border w3-border-gray">Back</a>
-            {% if item.status == 'RELEASED' %}
+            {% if item.status == 'RELEASED' and item.client.id == user.id %}
             <a href="/ltpapplications/generate.php?id={{ item.id }}" target="_blank"
                 class="w3-btn w3-green w3-round-large">Download Permit</a>
             {% endif %}

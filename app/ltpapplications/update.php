@@ -7,6 +7,8 @@ require_once '/var/www/utilities/db/models/ltpapplications.php';
 require_once '/var/www/utilities/db/models/butterflies.php';
 require_once '/var/www/utilities/db/models/dtos.php';
 require_once '/var/www/utilities/files/uploader.php';
+require_once '/var/www/utilities/files/uploader.php';
+require_once '/var/www/utilities/messaging/mailer.php';
 
 use Ramsey\Uuid\Uuid;
 use Models\UserType;
@@ -76,6 +78,7 @@ if (isset($_POST['submit']) && isset($_GET['id'])) {
             $item->validity_date = $_POST['validity_date'];
             $item->release_date = date("Y-m-d", strtotime("today"));
             $item->status = Status::RELEASED;
+            notify_client_about_released($item);
         }
     }
 

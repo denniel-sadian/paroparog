@@ -4,6 +4,7 @@ require_once '/var/www/utilities/context.php';
 require_once '/var/www/utilities/auth/guards.php';
 require_once '/var/www/utilities/db/models/users.php';
 require_once '/var/www/utilities/db/models/ltpapplications.php';
+require_once '/var/www/utilities/messaging/mailer.php';
 
 use Models\UserType;
 use Models\LtpApplication;
@@ -16,6 +17,8 @@ if (isset($_GET['id'])) {
     $item->accepted_at = date("Y-m-d", strtotime("today"));
     $item->status = Status::ACCEPTED;
     $item->save();
+
+    notify_client_about_accepted($item);
 
     exit(header('Location: /ltpapplications/update.php?id='.$item->id));
 }

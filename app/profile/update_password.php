@@ -11,7 +11,7 @@ if (isset($_POST['submit']) && isset($_SESSION['user'])) {
     $user = unserialize($_SESSION['user']);
     $password = $_POST['password'];
     $user->set_password($password);
-    $user->password_changed = 'shit';
+    $user->password_changed = true;
     $user->save();
 
     $_SESSION['user'] = serialize($user);

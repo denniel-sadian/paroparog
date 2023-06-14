@@ -34,7 +34,7 @@ function create_client($wfpwcp) {
     Username: $user->username\n
     Temporary Password: $password
     ";
-    send_mail($user->email, $message);
+    send_mail($user->email, $message, "Client Account Created");
 
     exit(header('Location: /login.php'));
 }

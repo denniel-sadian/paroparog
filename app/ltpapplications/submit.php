@@ -4,6 +4,7 @@ require_once '/var/www/utilities/context.php';
 require_once '/var/www/utilities/auth/guards.php';
 require_once '/var/www/utilities/db/models/users.php';
 require_once '/var/www/utilities/db/models/ltpapplications.php';
+require_once '/var/www/utilities/messaging/mailer.php';
 
 use Models\UserType;
 use Models\LtpApplication;
@@ -17,6 +18,7 @@ if (isset($_GET['id'])) {
         $item->submitted_at = date("Y-m-d", strtotime("today"));
         $item->status = Status::SUBMITTED;
         $item->save();
+        notify_admins_about_submitted($item);
     }
     exit(header('Location: /ltpapplications/update.php?id='.$item->id));
 }

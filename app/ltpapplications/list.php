@@ -40,7 +40,7 @@ if ($CONTEXT['user']->type == UserType::CLIENT) {
     }
 }
 
-$page = LtpApplication::filter($search, Sort::create('created_at', 'DESC'), PageRequest::create($_GET['page']-1, $_ENV['PAGE_SIZE']));
+$page = LtpApplication::filter($search, Sort::create('id', 'DESC'), PageRequest::create($_GET['page']-1, $_ENV['PAGE_SIZE']));
 
 $CONTEXT['tab'] = 'ltpapplications';
 $CONTEXT['page'] = $page;

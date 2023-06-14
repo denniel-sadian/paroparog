@@ -27,7 +27,7 @@ if (isset($_POST['submit'])) {
     Username: $user->username\n
     Temporary Password: $password
     ";
-    send_mail($user->email, $message);
+    send_mail($user->email, $message, "Account Created");
 
     exit(header('Location: /admin/users/list.php'));
 }
