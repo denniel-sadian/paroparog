@@ -18,6 +18,7 @@ function login($username, $password) {
 
     if (count($users) != 0) {
         $_SESSION['user'] = serialize($users[0]);
+        return $users[0];
     }
 
     return null;
