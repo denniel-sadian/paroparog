@@ -10,15 +10,15 @@ session_start();
 
 
 function login($username, $password) {
-    $user = Models\User::filter(Search::create([
+    $users = Models\User::filter(Search::create([
         'username' => $username,
         'password' => md5($password),
         'active' => true
-    ]))->items[0];
+    ]))->items;
 
-    if ($user != null) {
-        $_SESSION['user'] = serialize($user);
+    if (count($users) != 0) {
+        $_SESSION['user'] = serialize($users[0]);
     }
 
-    return $user;
+    return null;
 }
