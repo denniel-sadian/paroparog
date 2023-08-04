@@ -25,5 +25,3 @@ WORKDIR /var/www
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 COPY . .
-
-RUN composer install
