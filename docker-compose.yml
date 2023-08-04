@@ -22,6 +22,8 @@ services:
       - .env
     volumes:
       - ./app:/var/www
+    command: >
+      sh -c "composer install && php-fpm"
 
   database:
     image: mysql
