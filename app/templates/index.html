@@ -1,15 +1,13 @@
-{% extends "base.html" %}
-
-{% block title %}System{% endblock %}
-
-{% block styles %}
+{% extends "base.html" %} {% block title %}System{% endblock %} {% block styles
+%}
 <style>
     header {
         padding: 50px 20px 100px 20px;
     }
 
-    header>.cont {
+    header > .cont {
         padding-top: 50px;
+        padding-bottom: 20px;
         display: grid;
         grid-template-columns: auto auto;
         margin-left: auto;
@@ -31,40 +29,71 @@
     }
 
     .landing-text span {
-        font-family: 'Roboto Slab', serif !important;
+        font-family: "Roboto Slab", serif !important;
         font-weight: 600;
         font-size: 25px;
         color: rgb(171, 171, 171);
     }
 
     .landing-text h1 {
-        font-family: 'Roboto Slab', serif !important;
+        font-family: "Roboto Slab", serif !important;
         font-weight: 900;
         font-size: 50px;
         line-height: 64px;
     }
 
     .landing-text p {
-        font-family: 'Nunito', sans-serif;
+        font-family: "Nunito", sans-serif;
         font-size: 18px;
     }
-</style>
-{% endblock %}
 
-{% block content %}
+    @media only screen and (max-width: 1000px) {
+        header {
+            padding: 20px;
+        }
+
+        header > .cont {
+            grid-template-columns: 1fr;
+            padding: 20px 0px;
+        }
+
+        .landing-img {
+            justify-content: center;
+        }
+
+        .landing-img img {
+            width: 200px;
+        }
+
+        .landing-text {
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .landing-text h1 {
+            font-size: 30px;
+            line-height: 35px;
+        }
+    }
+</style>
+{% endblock %} {% block content %}
 <header class="w3-pale-blue">
     <div class="cont">
         <div class="landing-img">
-            <img src="media/static/img/butterfly4.gif">
+            <img src="media/static/img/butterfly4.gif" />
         </div>
         <div class="landing-text">
             <span>Welcome to DENR's</span>
-            <h1 class="w3-text-blue">Local Transport Permiting System for Butterflies</h1>
-            <p>Where you can apply for Local Transport Permit online – and monitor their
-                statuses
-                online.
+            <h1 class="w3-text-blue">
+                Local Transport Permiting System for Butterflies
+            </h1>
+            <p>
+                Where you can apply for Local Transport Permit online – and
+                monitor their statuses online.
             </p>
-            <a href="register.php" class="w3-btn w3-blue w3-round-xxlarge">GET STARTED</a>
+            <a href="register.php" class="w3-btn w3-blue w3-round-xxlarge"
+                >GET STARTED</a
+            >
         </div>
     </div>
 </header>

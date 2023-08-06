@@ -1,8 +1,5 @@
-{% extends "base.html" %}
-
-{% block title %}Butterflies{% endblock %}
-
-{% block styles %}
+{% extends "base.html" %} {% block title %}Butterflies{% endblock %} {% block
+styles %}
 <style>
     main {
         padding: 100px 20px;
@@ -15,7 +12,7 @@
     }
 
     h1 {
-        font-family: 'Roboto Slab', serif !important;
+        font-family: "Roboto Slab", serif !important;
         font-weight: 900;
     }
 
@@ -50,7 +47,7 @@
         display: flex;
     }
 
-    .btns>* {
+    .btns > * {
         border-radius: 100%;
         width: 40px;
         height: 40px;
@@ -73,45 +70,72 @@
         display: none;
     }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <main>
     <div class="cont">
         <div class="list-head">
             <h1><i class="fa fa-list-ul"></i> Butterflies</h1>
-            <button class="w3-btn w3-blue w3-round-xxlarge" id="creation-form-btn"><i class="fa fa-plus-circle"></i> Add
-                Butterfly</button>
+            <button
+                class="w3-btn w3-blue w3-round-xxlarge"
+                id="creation-form-btn"
+            >
+                <i class="fa fa-plus-circle"></i> Add Butterfly
+            </button>
         </div>
-        <form action="/admin/butterflies/create.php" method="POST" id="creation-form" class="w3-pale-blue">
+        <form
+            action="/admin/butterflies/create.php"
+            method="POST"
+            id="creation-form"
+            class="w3-pale-blue"
+        >
             <div class="text-box">
                 <span>Specie Type:</span>
-                <input type="text" name="specie_type" required>
+                <input
+                    type="text"
+                    name="specie_type"
+                    value="Butterfly"
+                    disabled
+                />
+                <input
+                    type="text"
+                    name="specie_type"
+                    value="Butterfly"
+                    hidden
+                    required
+                />
             </div>
             <div class="text-box">
                 <span>Class Name:</span>
-                <input type="text" name="class_name" required>
+                <input type="text" name="class_name" required />
             </div>
             <div class="text-box">
                 <span>Family Name:</span>
-                <input type="text" name="family_name" required>
+                <input type="text" name="family_name" required />
             </div>
             <div class="text-box">
                 <span>Common Name:</span>
-                <input type="text" name="common_name" required>
+                <input type="text" name="common_name" required />
             </div>
             <div class="text-box">
                 <span>Scientific Name:</span>
-                <input type="text" name="scientific_name" required>
+                <input type="text" name="scientific_name" required />
             </div>
             <div class="buttons">
-                <button class="w3-btn w3-text-blue w3-border w3-border-blue w3-round-xxlarge"
-                    onclick="event.preventDefault(); $('#creation-form').fadeToggle();">Close</button>
-                <input type="submit" class="w3-btn w3-blue w3-round-xxlarge" name="submit" value="Save">
+                <button
+                    class="w3-btn w3-text-blue w3-border w3-border-blue w3-round-xxlarge"
+                    onclick="event.preventDefault(); $('#creation-form').fadeToggle();"
+                >
+                    Close
+                </button>
+                <input
+                    type="submit"
+                    class="w3-btn w3-blue w3-round-xxlarge"
+                    name="submit"
+                    value="Save"
+                />
             </div>
         </form>
-        {% include 'search_box.html' %}
-        {% for i in page.items %}
+        {% include 'search_box.html' %} {% for i in page.items %}
         <div class="butterfly">
             <div class="details" id="details-{{ i.id }}">
                 <div class="inf">
@@ -135,49 +159,98 @@
                     <span>{{ i.scientific_name }}</span>
                 </div>
                 <div class="btns">
-                    <button class="w3-btn w3-hover-green" onclick="edit('{{ i.id }}');">
+                    <button
+                        class="w3-btn w3-hover-green"
+                        onclick="edit('{{ i.id }}');"
+                    >
                         <i class="fa fa-pencil-square-o"></i>
                     </button>
                 </div>
             </div>
-            <form id="edit-form-{{ i.id }}" action="/admin/butterflies/update.php?id={{ i.id }}" method="POST"
-                class="w3-pale-blue">
+            <form
+                id="edit-form-{{ i.id }}"
+                action="/admin/butterflies/update.php?id={{ i.id }}"
+                method="POST"
+                class="w3-pale-blue"
+            >
                 <div class="text-box">
                     <span>Specie Type:</span>
-                    <input type="text" name="specie_type" value="{{ i.specie_type }}" required>
+                    <input
+                        type="text"
+                        name="specie_type"
+                        value="{{ i.specie_type }}"
+                        required
+                        disabled
+                    />
+                    <input
+                        type="text"
+                        name="specie_type"
+                        value="{{ i.specie_type }}"
+                        required
+                        hidden
+                    />
                 </div>
                 <div class="text-box">
                     <span>Class Name:</span>
-                    <input type="text" name="class_name" value="{{ i.class_name }}" required>
+                    <input
+                        type="text"
+                        name="class_name"
+                        value="{{ i.class_name }}"
+                        required
+                    />
                 </div>
                 <div class="text-box">
                     <span>Family Name:</span>
-                    <input type="text" name="family_name" value="{{ i.family_name }}" required>
+                    <input
+                        type="text"
+                        name="family_name"
+                        value="{{ i.family_name }}"
+                        required
+                    />
                 </div>
                 <div class="text-box">
                     <span>Common Name:</span>
-                    <input type="text" name="common_name" value="{{ i.common_name }}" required>
+                    <input
+                        type="text"
+                        name="common_name"
+                        value="{{ i.common_name }}"
+                        required
+                    />
                 </div>
                 <div class="text-box">
                     <span>Scientific Name:</span>
-                    <input type="text" name="scientific_name" value="{{ i.scientific_name }}" required>
+                    <input
+                        type="text"
+                        name="scientific_name"
+                        value="{{ i.scientific_name }}"
+                        required
+                    />
                 </div>
                 <div class="buttons">
-                    <a href="/admin/butterflies/delete.php?id={{ i.id }}"
-                        class="w3-btn w3-text-red w3-round-xxlarge w3-border w3-border-red">Delete</a>
-                    <button class="w3-btn w3-text-blue w3-border w3-border-blue w3-round-xxlarge"
-                        onclick="event.preventDefault(); edit('{{ i.id }}');">Close</button>
-                    <input type="submit" class="w3-btn w3-blue w3-round-xxlarge" name="submit" value="Save">
+                    <a
+                        href="/admin/butterflies/delete.php?id={{ i.id }}"
+                        class="w3-btn w3-text-red w3-round-xxlarge w3-border w3-border-red"
+                        >Delete</a
+                    >
+                    <button
+                        class="w3-btn w3-text-blue w3-border w3-border-blue w3-round-xxlarge"
+                        onclick="event.preventDefault(); edit('{{ i.id }}');"
+                    >
+                        Close
+                    </button>
+                    <input
+                        type="submit"
+                        class="w3-btn w3-blue w3-round-xxlarge"
+                        name="submit"
+                        value="Save"
+                    />
                 </div>
             </form>
         </div>
-        {% endfor %}
-        {% include 'paginator.html' %}
+        {% endfor %} {% include 'paginator.html' %}
     </div>
 </main>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
     function edit(id) {
         $(`#details-${id}`).fadeToggle();
@@ -185,13 +258,11 @@
     }
 
     $(function () {
-        $('#creation-form-btn').click(function () {
-            $('#creation-form').fadeToggle();
+        $("#creation-form-btn").click(function () {
+            $("#creation-form").fadeToggle();
         });
 
-        $('#creation-form-close-btn').click(function () {
-
-        });
+        $("#creation-form-close-btn").click(function () {});
     });
 </script>
 {% endblock %}

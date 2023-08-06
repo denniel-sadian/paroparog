@@ -1,21 +1,23 @@
-{% extends "base.html" %}
-
-{% block title %}LTP Applications{% endblock %}
-
-{% block styles %}
+{% extends "base.html" %} {% block title %}LTP Applications{% endblock %} {%
+block styles %}
 <style>
     main {
         padding: 100px 20px;
+    }
+
+    main {
+        width: 100%;
     }
 
     main .cont {
         margin-left: auto;
         margin-right: auto;
         max-width: 1100px;
+        width: 100%;
     }
 
     h1 {
-        font-family: 'Roboto Slab', serif !important;
+        font-family: "Roboto Slab", serif !important;
         font-weight: 900;
     }
 
@@ -50,7 +52,7 @@
         display: flex;
     }
 
-    .btns>* {
+    .btns > * {
         border-radius: 100%;
         width: 40px;
         height: 40px;
@@ -60,84 +62,80 @@
         align-items: center;
     }
 
-    table {
-        width: 100%;
-    }
-
     table th,
     table .emp {
-        font-family: 'Roboto Slab', serif !important;
+        font-family: "Roboto Slab", serif !important;
         text-align: left;
         font-weight: bold;
     }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <main>
     <div class="cont">
         <div class="list-head">
             <h1><i class="fa fa-th-list"></i> LTP Applications</h1>
             {% if user.type == 'CLIENT' %}
-            <a href="/ltpapplications/create.php" class="w3-btn w3-blue w3-round-xxlarge"><i
-                    class="fa fa-plus-circle"></i>
-                Create LTP Application</a>
+            <a
+                href="/ltpapplications/create.php"
+                class="w3-btn w3-blue w3-round-xxlarge"
+                ><i class="fa fa-plus-circle"></i> Create LTP Application</a
+            >
             {% endif %}
         </div>
         {% include 'search_box.html' %}
-        <div class="table-cont">
-            <div class="table-cont">
-                <table class="w3-table-all">
-                    <tr class="head">
-                        <th>Application No</th>
-                        {% if user.type != 'CLIENT' %}
-                        <th>Client</th>
-                        {% endif %}
-                        <th>Transport Address</th>
-                        <th>Transport Date</th>
-                        <th>Status</th>
-                        <th>Date Created</th>
-                        <th>Date Updated</th>
-                        <th>Date Submitted</th>
-                        <th>Date Returned</th>
-                        <th>Date Accepted</th>
-                        <th>Date Released</th>
-                        <th>Valid Until</th>
-                        <th>Action</th>
-                    </tr>
-                    {% for i in page.items %}
-                    <tr>
-                        <td class="emp">{{ i.no }}</td>
-                        {% if user.type != 'CLIENT' %}
-                        <td class="emp">{{ i.client.full_name }}</td>
-                        {% endif %}
-                        <td>{{ i.transport_address }}</td>
-                        <td>{{ i.transport_date }}</td>
-                        <td class="emp">{{ i.status }}{% if i.status == 'DRAFT' and i.remarks != '' %}/RETURNED{% endif
-                            %}</td>
-                        <td>{{ i.created_at }}</td>
-                        <td>{{ i.updated_at }}</td>
-                        <td>{{ i.submitted_at }}</td>
-                        <td>{{ i.returned_at }}</td>
-                        <td>{{ i.accepted_at }}</td>
-                        <td>{{ i.release_date }}</td>
-                        <td>{{ i.validity_date }}</td>
-                        <td>
-                            <div class="btns">
-                                <a class="w3-btn w3-hover-green" href="/ltpapplications/update.php?id={{ i.id }}">
-                                    <i class="fa fa-pencil-square-o"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
+        <div style="overflow-x: auto">
+            <table class="w3-table-all">
+                <tr class="head">
+                    <th>Application No</th>
+                    {% if user.type != 'CLIENT' %}
+                    <th>Client</th>
+                    {% endif %}
+                    <th>Transport Address</th>
+                    <th>Transport Date</th>
+                    <th>Status</th>
+                    <th>Date Created</th>
+                    <th>Date Updated</th>
+                    <th>Date Submitted</th>
+                    <th>Date Returned</th>
+                    <th>Date Accepted</th>
+                    <th>Date Released</th>
+                    <th>Valid Until</th>
+                    <th>Action</th>
+                </tr>
+                {% for i in page.items %}
+                <tr>
+                    <td class="emp">{{ i.no }}</td>
+                    {% if user.type != 'CLIENT' %}
+                    <td class="emp">{{ i.client.full_name }}</td>
+                    {% endif %}
+                    <td>{{ i.transport_address }}</td>
+                    <td>{{ i.transport_date }}</td>
+                    <td class="emp">
+                        {{ i.status }}{% if i.status == 'DRAFT' and i.remarks !=
+                        '' %}/RETURNED{% endif %}
+                    </td>
+                    <td>{{ i.created_at }}</td>
+                    <td>{{ i.updated_at }}</td>
+                    <td>{{ i.submitted_at }}</td>
+                    <td>{{ i.returned_at }}</td>
+                    <td>{{ i.accepted_at }}</td>
+                    <td>{{ i.release_date }}</td>
+                    <td>{{ i.validity_date }}</td>
+                    <td>
+                        <div class="btns">
+                            <a
+                                class="w3-btn w3-hover-green"
+                                href="/ltpapplications/update.php?id={{ i.id }}"
+                            >
+                                <i class="fa fa-pencil-square-o"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
         {% include 'paginator.html' %}
     </div>
 </main>
-{% endblock %}
-
-{% block scripts %}
-{% endblock %}
+{% endblock %} {% block scripts %} {% endblock %}
