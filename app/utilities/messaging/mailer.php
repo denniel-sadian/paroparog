@@ -19,6 +19,7 @@ function send_mail($to_email, $message, $subject = "LTP Notification") {
         $mail->SMTPAuth = true;
         $mail->Username = $_ENV['EMAIL_USER'];
         $mail->Password = $_ENV['EMAIL_PASS'];
+        $mail->SMTPSecure = 'tls';
     }
     $mail->addAddress($to_email, '');
     $mail->Subject = $subject;
