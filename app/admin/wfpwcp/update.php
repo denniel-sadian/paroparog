@@ -4,12 +4,14 @@ require_once '/var/www/utilities/context.php';
 require_once '/var/www/utilities/auth/guards.php';
 require_once '/var/www/utilities/db/models/users.php';
 require_once '/var/www/utilities/db/models/wfp_wcp.php';
+require_once '/var/www/utilities/db/models/butterflies.php';
 require_once '/var/www/utilities/db/models/dtos.php';
 require_once '/var/www/utilities/files/uploader.php';
 
 use Ramsey\Uuid\Uuid;
 use Models\UserType;
 use Models\WfpWcp;
+use Models\Butterfly;
 use DTOs\Search;
 use DTOs\Sort;
 use DTOs\PageRequest;
@@ -20,6 +22,7 @@ allow([UserType::ADMIN]);
 if (isset($_GET['id'])) {
     $item = WfpWcp::get($_GET['id']);
     $CONTEXT['item'] = $item;
+    $CONTEXT['animals'] = Butterfly::filter_all(null, Sort::create('common_name', 'ASC'));
 } else {
     exit(header('Location: /admin/wfpwcp/list.php'));
 }
