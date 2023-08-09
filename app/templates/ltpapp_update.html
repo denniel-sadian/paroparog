@@ -232,42 +232,44 @@
         </div>
         {% endif %}
 
-        <form action="/ltpapplications/transportentries/create.php" method="POST" class="entryform">
+        <form action="/ltpapplications/transportentries/create.php" method="POST" class="entryform" id="transport-list">
             <h4>Transport Entries</h4>
-            <table class="w3-table-all">
-                <tr>
-                    <th>Common/Scientific Name</th>
-                    <th>Description</th>
-                    <th>Quantity</th>
-                    {% if user.id == item.client.id and item.status == 'DRAFT' %}
-                    <th>Action</th>
-                    {% endif %}
-                </tr>
-                {% for i in item.transport_entries %}
-                <tr>
-                    <td class="emp">{{ i.animal.common_name }}/{{ i.animal.scientific_name }}</td>
-                    <td>{{ i.description }}</td>
-                    <td>{{ i.quantity }}</td>
-                    {% if user.id == item.client.id and item.status == 'DRAFT' %}
-                    <td><a href="/ltpapplications/transportentries/delete.php?id={{ i.id }}" class="w3-text-red"><i
-                                class="fa fa-trash-o"></i> Delete</a></td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </table>
+            <div style="overflow-x: auto;">
+                <table class="w3-table-all">
+                    <tr>
+                        <th>Common/Scientific Name</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        {% if user.id == item.client.id and item.status == 'DRAFT' %}
+                        <th>Action</th>
+                        {% endif %}
+                    </tr>
+                    {% for i in item.transport_entries %}
+                    <tr>
+                        <td class="emp">{{ i.animal.common_name }}/{{ i.animal.scientific_name }}</td>
+                        <td>{{ i.description }}</td>
+                        <td>{{ i.quantity }}</td>
+                        {% if user.id == item.client.id and item.status == 'DRAFT' %}
+                        <td><a href="/ltpapplications/transportentries/delete.php?id={{ i.id }}" class="w3-text-red"><i
+                                    class="fa fa-trash-o"></i> Delete</a></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
             {% if user.id == item.client.id and item.status == 'DRAFT' %}
             <div class="text-box">
                 <span>Butterfly:</span>
-                <select name="animal_id" required>
-                    {% for i in animals %}
-                    <option value="{{ i.id }}">{{ i.common_name }}/{{ i.scientific_name }}</option>
+                <select name="animal_id" id="animal-select" required>
+                    {% for i in allowed_animals %}
+                    <option value="{{ i.animal.id }}">{{ i.animal.common_name }}/{{ i.animal.scientific_name }}</option>
                     {% endfor %}
                 </select>
             </div>
             <input type="hidden" name="ltpapp_id" value="{{ item.id }}" required>
             <div class="text-box">
                 <span>Quantity:</span>
-                <input type="number" name="quantity" min="1" required>
+                <input type="number" name="quantity" min="1" id="allowed-quantity-input" required>
             </div>
             <div class="text-box">
                 <span>Description:</span>
@@ -305,5 +307,14 @@
 
 {% block scripts %}
 <script>
+    const animals = {
+        {% for i in allowed_animals %}
+        '{{ i.animal.id }}': '{{ i.quantity }}',
+        {% endfor %}
+    };
+    $('#animal-select').change(function() {
+        $('#allowed-quantity-input').attr('max', animals[$(this).val()]);
+    });
+    $('#allowed-quantity-input').attr('max', animals[$('#animal-select').val()]);
 </script>
 {% endblock %}
