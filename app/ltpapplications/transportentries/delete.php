@@ -15,6 +15,6 @@ allow([UserType::ADMIN, UserType::CLIENT]);
 if (isset($_GET['id'])) {
     $entry = TransportEntry::get($_GET['id']);
     $entry->delete();
-    exit(header('Location: /ltpapplications/update.php?id='.$entry->ltpapp_id));
+    exit(header('Location: /ltpapplications/update.php?id='.$entry->ltpapp_id.'#transport-list'));
 }
 
