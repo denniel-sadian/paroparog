@@ -5,6 +5,7 @@ require_once '/var/www/utilities/auth/guards.php';
 require_once '/var/www/utilities/db/models/users.php';
 require_once '/var/www/utilities/db/models/ltpapplications.php';
 require_once '/var/www/utilities/db/models/butterflies.php';
+require_once '/var/www/utilities/db/models/allowed_animals.php';
 require_once '/var/www/utilities/db/models/dtos.php';
 require_once '/var/www/utilities/files/uploader.php';
 require_once '/var/www/utilities/files/uploader.php';
@@ -16,6 +17,7 @@ use Models\User;
 use Models\LtpApplication;
 use Models\Status;
 use Models\Butterfly;
+use Models\AllowedAnimal;
 use DTOs\Search;
 use DTOs\Sort;
 use DTOs\PageRequest;
@@ -36,7 +38,7 @@ if (isset($_GET['id'])) {
     }
 
     $CONTEXT['item'] = $item;
-    $CONTEXT['animals'] = Butterfly::filter_all(null, Sort::create('common_name', 'ASC'));
+    $CONTEXT['allowed_animals'] = AllowedAnimal::filter_all(Search::create(['wcp_id' => $CONTEXT['user']->wfpwcp_id]));
 } else {
     exit(header('Location: /admin/ltpapplications/list.php'));
 }
