@@ -37,6 +37,7 @@ services:
     volumes:
       - ./database:/etc/mysql/conf.d
       - ./logs/database:/var/log/mysql
+      - ./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - paroparogdb:/var/lib/mysql
 
   phpmyadmin:
