@@ -21,4 +21,4 @@ if (isset($_POST['submit'])) {
     $entry->save();
 }
 
-exit(header('Location: /ltpapplications/update.php?id='.$_POST['ltpapp_id']));
+exit(header('Location: /ltpapplications/update.php?id='.$_POST['ltpapp_id'].'#transport-list'));
