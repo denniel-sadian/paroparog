@@ -21,6 +21,9 @@ $context['tab'] = 'register';
 
 function create_client($wfpwcp) {
     $_POST['type'] = UserType::CLIENT;
+    $_POST['first_name'] = $wfpwcp->permitee_first_name;
+    $_POST['last_name'] = $wfpwcp->permitee_last_name;
+    $_POST['username'] = strtolower('ltpmdq_'.substr($_POST['first_name'], 0, 3).$_POST['last_name']);
     $user = User::create($_POST);
     $user->wfpwcp_id = $wfpwcp->id;
 
