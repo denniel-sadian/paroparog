@@ -45,6 +45,11 @@
                     item.status }}</span>
             </h1>
         </div>
+
+        {% if item.validity_date %}
+        <p class="w3-large">Valid until {{ item.validity_date }}</p>
+        {% endif %}
+
         <form action="" method="POST" enctype="multipart/form-data">
 
             {% if user.id == item.client.id %}
@@ -113,13 +118,6 @@
             </div>
             {% endif %}
 
-            {% if user.type == 'RELEASING_PERSONNEL' %}
-            <div class="text-box">
-                <span>Validity Date:</span>
-                <input type="date" name="validity_date" value="{{ item.validity_date }}">
-            </div>
-            {% endif %}
-
             {% if item.status != 'RELEASED' %}
             <div class="buttons">
                 {% if item.status == 'DRAFT' and user.id == item.client.id %}
@@ -127,10 +125,15 @@
                     class="w3-btn w3-text-red w3-round-large w3-border w3-border-red">Delete</a>
                 {% endif %}
 
+                {% if user.type != 'RELEASING_PERSONNEL' %}
                 {% if (item.status == 'DRAFT' and user.id == item.client.id) or (user.type != 'CLIENT' and user.type !=
                 'PAYMENT_SIGNATORY') or user.type == 'ADMIN' %}
                 <input type="submit" class="w3-btn w3-blue w3-round-large" name="submit" value="Save">
                 {% endif %}
+                {% else %}
+                <a href="/ltpapplications/release.php?id{{ item.id }}" class="w3-btn w3-blue w3-round-large">Release</a>
+                {% endif %}
+
 
                 {% if item.status == 'DRAFT' and user.id == item.client.id %}
                 <a href="/ltpapplications/submit.php?id{{ item.id }}" class="w3-btn w3-round-large w3-green">Submit</a>

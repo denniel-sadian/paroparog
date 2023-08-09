@@ -74,16 +74,6 @@ if (isset($_POST['submit']) && isset($_GET['id'])) {
         }
     }
 
-    if ($CONTEXT['user']->type == UserType::RELEASING_PERSONNEL) {
-        if (isset($_POST['validity_date'])) {
-            $item->releasing_personnel_id = $CONTEXT['user']->id;
-            $item->validity_date = $_POST['validity_date'];
-            $item->release_date = date("Y-m-d", strtotime("today"));
-            $item->status = Status::RELEASED;
-            notify_client_about_released($item);
-        }
-    }
-
     $item->updated_at = date("Y-m-d", strtotime("today"));
     $item->save();
     exit(header('Location: /ltpapplications/update.php?id='.$item->id));

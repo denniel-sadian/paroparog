@@ -30,14 +30,17 @@ if (isset($_GET['search']) && $_GET['search'] != '') {
     ], 'OR', false);
 }
 
+if (isset($_GET['status'])) {
+    $CONTEXT['status'] = $_GET['status'];
+    if ($_GET['status'] != 'ALL') {
+        $search->fields['status'] = $_GET['status'];
+    }
+} else {
+    $CONTEXT['status'] = 'ALL';
+}
+
 if ($CONTEXT['user']->type == UserType::CLIENT) {
     $search->extra = "client_id=".$CONTEXT['user']->id;
-} else {
-    if ($CONTEXT['user']->type == 'ADMIN') {
-        $search->extra = "status!='".Status::DRAFT."' OR remarks!=''";
-    } else {
-        $search->extra = "status='".Status::ACCEPTED."'";
-    }
 }
 
 $page = LtpApplication::filter($search, Sort::create('id', 'DESC'), PageRequest::create($_GET['page']-1, $_ENV['PAGE_SIZE']));

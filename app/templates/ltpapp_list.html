@@ -68,6 +68,17 @@ block styles %}
         text-align: left;
         font-weight: bold;
     }
+
+    .status-filter {
+        margin: 10px 0px;
+    }
+    .status-filter > a {
+        background: #f1f1f1;
+    }
+    .status-filter > a:hover, .status-filter > a.active {
+        background: #2196F3;
+        color: white;
+    }
 </style>
 {% endblock %} {% block content %}
 <main>
@@ -83,6 +94,13 @@ block styles %}
             {% endif %}
         </div>
         {% include 'search_box.html' %}
+        <div class="status-filter">
+            <a href="?status=ALL" class="w3-btn w3-round-xxlarge {% if status == 'ALL' %}active{% endif %}">ALL</a>
+            <a href="?status=DRAFT" class="w3-btn w3-round-xxlarge {% if status == 'DRAFT' %}active{% endif %}">DRAFT</a>
+            <a href="?status=SUBMITTED" class="w3-btn w3-round-xxlarge {% if status == 'SUBMITTED' %}active{% endif %}">SUBMITTED</a>
+            <a href="?status=ACCEPTED" class="w3-btn w3-round-xxlarge {% if status == 'ACCEPTED' %}active{% endif %}">ACCEPTED</a>
+            <a href="?status=RELEASED" class="w3-btn w3-round-xxlarge {% if status == 'RELEASED' %}active{% endif %}">RELEASED</a>
+        </div>
         <div style="overflow-x: auto">
             <table class="w3-table-all">
                 <tr class="head">
