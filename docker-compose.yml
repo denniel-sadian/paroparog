@@ -7,7 +7,7 @@ services:
     depends_on:
       - app
     ports:
-      - 777:80
+      - 80:80
     volumes:
       - ./logs/nginx:/var/log/nginx
       - ./app:/var/www
