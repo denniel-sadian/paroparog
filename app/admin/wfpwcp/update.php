@@ -29,7 +29,8 @@ if (isset($_GET['id'])) {
 
 if (isset($_POST['submit']) && isset($_GET['id'])) {
     $item = WfpWcp::get($_GET['id']);
-    $item->permitee_name = $_POST['permitee_name'];
+    $item->permitee_first_name = $_POST['permitee_first_name'];
+    $item->permitee_last_name = $_POST['permitee_last_name'];
     $item->permitee_address = $_POST['permitee_address'];
     $item->farm_name = $_POST['farm_name'];
     $item->farm_address = $_POST['farm_address'];

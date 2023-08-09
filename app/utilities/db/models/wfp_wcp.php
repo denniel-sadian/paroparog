@@ -20,7 +20,8 @@ class WfpWcp {
     const TABLE = 'wfp_wcp_details';
 
     public $id;
-    public $permitee_name;
+    public $permitee_first_name;
+    public $permitee_last_name;
     public $permitee_address;
     public $permitee_photo_link;
     public $farm_name;
@@ -37,7 +38,8 @@ class WfpWcp {
 
     static function create($fields) {
         $wfpwcp = new WfpWcp();
-        $wfpwcp->permitee_name = $fields['permitee_name'];
+        $wfpwcp->permitee_first_name = $fields['permitee_first_name'];
+        $wfpwcp->permitee_last_name = $fields['permitee_last_name'];
         $wfpwcp->permitee_address = $fields['permitee_address'];
         $wfpwcp->permitee_photo_link = $fields['permitee_photo_link'];
         $wfpwcp->farm_name = $fields['farm_name'];
@@ -113,7 +115,8 @@ class WfpWcp {
 
         $INSERT = '
             INSERT INTO '.self::TABLE.' (
-                permitee_name,
+                permitee_first_name,
+                permitee_last_name,
                 permitee_address,
                 permitee_photo_link,
                 farm_name,
@@ -127,7 +130,8 @@ class WfpWcp {
                 expiry_date
             )
             VALUES (
-                :permitee_name,
+                :permitee_first_name,
+                :permitee_last_name,
                 :permitee_address,
                 :permitee_photo_link,
                 :farm_name,
@@ -143,7 +147,8 @@ class WfpWcp {
 
         $UPDATE = '
             UPDATE '.self::TABLE.' SET
-                permitee_name = :permitee_name,
+                permitee_first_name = :permitee_first_name,
+                permitee_last_name = :permitee_last_name,
                 permitee_address = :permitee_address,
                 permitee_photo_link = :permitee_photo_link,
                 farm_name = :farm_name,
@@ -160,7 +165,8 @@ class WfpWcp {
         $statement = $statement = $conn->prepare($this->id == null ? $INSERT : $UPDATE);
 
         $params = [
-            ':permitee_name' => $this->permitee_name,
+            ':permitee_first_name' => $this->permitee_first_name,
+            ':permitee_last_name' => $this->permitee_last_name,
             ':permitee_address' => $this->permitee_address,
             ':permitee_photo_link' => $this->permitee_photo_link,
             ':farm_name' => $this->farm_name,
