@@ -5,8 +5,10 @@ use PDO;
 
 require_once '/var/www/utilities/db/connection.php';
 require_once '/var/www/utilities/db/models/helper_functions.php';
+require_once '/var/www/utilities/db/models/allowed_animals.php';
 require_once '/var/www/utilities/db/models/dtos.php';
 
+use Models\AllowedAnimal;
 use DTOs\PageRequest;
 use DTOs\Page;
 use DTOs\Search;
@@ -31,6 +33,7 @@ class WfpWcp {
     public $issuance_date;
     public $expiry_date;
     public $expired = false;
+    public $allowed_animals = [];
 
     static function create($fields) {
         $wfpwcp = new WfpWcp();
@@ -72,6 +75,7 @@ class WfpWcp {
         $items = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\WfpWcp');
         foreach ($items as $item) {
             $item->expired = $item->is_expired();
+            $item->fetch_related();
         }
 
         $SQL = 'SELECT count(*) FROM '.self::TABLE;
@@ -96,6 +100,8 @@ class WfpWcp {
         $statement = $conn->prepare($SELECT_ONE);
         $statement->execute([':id' => $id]);
         $obj = $statement->fetchAll(PDO::FETCH_CLASS, 'Models\WfpWcp')[0];
+
+        $obj->fetch_related();
 
         $conn = null;
 
@@ -177,7 +183,13 @@ class WfpWcp {
             $this->id = $conn->lastInsertId();
         }
 
+        $this->fetch_related();
+
         $conn = null;
+    }
+
+    function fetch_related() {
+        $this->allowed_animals = AllowedAnimal::filter_all(Search::create(['wcp_id' => $this->id]));
     }
 
     function delete() {
