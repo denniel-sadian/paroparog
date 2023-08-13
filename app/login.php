@@ -10,6 +10,9 @@ if (isset($_POST['submit'])) {
     $user = login($_POST['username'], $_POST['password']);
 
     if ($user != null) {
+        if (isset($_GET['next'])) {
+            exit(header('Location: '.$_GET['next']));
+        }
         redirect();
     } else {
         $context['error'] = 'Ooops! You entered an invalid username or password.';

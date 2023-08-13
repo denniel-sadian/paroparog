@@ -14,7 +14,8 @@ function allow($types) {
             exit(header('Location: /forbidden.php'));
         }
     } else {
-        exit(header('Location: /login.php'));
+        $accessingURL = $_SERVER['REQUEST_URI'];
+        exit(header('Location: /login.php?next='.$accessingURL));
     }
 }
 
