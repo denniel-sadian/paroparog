@@ -28,6 +28,14 @@ class Status {
     const RELEASED = 'RELEASED';
     const USED = 'USED';
     const EXPIRED = 'EXPIRED';
+    const ALL = [
+        self::DRAFT,
+        self::SUBMITTED,
+        self::ACCEPTED,
+        self::RELEASED,
+        self::USED,
+        self::EXPIRED
+    ];
 }
 
 
@@ -218,6 +226,13 @@ class LtpApplication {
         $conn = null;
 
         return $page;
+    }
+
+    static function filter_all(Search $search = null, Sort $sort = null) {
+        $total_items = self::filter($search, $sort)->total_items;
+        $page_req = $page_req = PageRequest::create(0, $total_items);
+        $items = self::filter($search, $sort, $page_req)->items;
+        return $items;
     }
 
     static function get($id) {

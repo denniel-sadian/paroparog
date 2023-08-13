@@ -47,5 +47,6 @@ $page = LtpApplication::filter($search, Sort::create('id', 'DESC'), PageRequest:
 
 $CONTEXT['tab'] = 'ltpapplications';
 $CONTEXT['page'] = $page;
+$CONTEXT['statuses'] = Status::ALL;
 
 echo $twig->render('ltpapp_list.html', $CONTEXT);

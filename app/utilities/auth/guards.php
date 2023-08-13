@@ -10,8 +10,6 @@ function allow($types) {
             exit(header('Location: /profile/update_password.php'));
         }
 
-        //echo $user->type;
-        //var_dump(!in_array($user->type, $types));
         if (!(in_array($user->type, $types))) {
             exit(header('Location: /forbidden.php'));
         }

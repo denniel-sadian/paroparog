@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="/media/static/css/w3.css" />
+    <script src="https://kit.fontawesome.com/209b41c676.js" crossorigin="anonymous"></script>
     <title>{{ ltp.no }}</title>
     <style>
         main {
@@ -49,24 +50,31 @@
             height: auto;
         }
 
-        .qrcode-cont {
-            display: flex;
-            justify-content: right;
-            width: 100%;
-        }
-
-        #qrcode img {
-            margin: 0px;
-            width: 100px;
-            height: 100px;
+        .message {
+            padding: 10px;
         }
     </style>
 </head>
 
 <body>
     <main>
-        <div class="qrcode-cont">
-            <div id="qrcode"></div>
+        <div class="message">
+            {% if status == 'used' %}
+            <div class="w3-panel w3-pale-green w3-border-left w3-border-green w3-leftbar">
+                <h3 class="w3-text-green"><i class="fa fa-check-circle"></i> Validated Successfully</h3>
+                <p class="w3-text-gray">This Local Transport Permit with number {{ ltp.no }} has been validated successfully and is now marked as used.</p>
+            </div>
+            {% elseif status == 'already_used' %}
+            <div class="w3-panel w3-pale-red w3-border-left w3-border-red w3-leftbar">
+                <h3 class="w3-text-red"><i class="fa fa-exclamation-triangle"></i> Already Used</h3>
+                <p class="w3-text-gray">This Local Transport Permit with number {{ ltp.no }} has been used before and can no longer be used again.</p>
+            </div>
+            {% elseif status == 'expired' %}
+            <div class="w3-panel w3-pale-red w3-border-left w3-border-red w3-leftbar">
+                <h3 class="w3-text-red"><i class="fa fa-exclamation-triangle"></i> Expired</h3>
+                <p class="w3-text-gray">This Local Transport Permit with number {{ ltp.no }} is already expired and can no longer be used.</p>
+            </div>
+            {% endif %}
         </div>
         <h4>Wildlife Transport <br>
             Permit No: {{ ltp.no }}</h4>
@@ -118,10 +126,6 @@
         <img src="{{ ltp.client.wfpwcp.wcp_photo_link }}">
         <img src="{{ ltp.payment_order.or_link }}">
     </main>
-    <script type="text/javascript">
-        const url = "{{ PROTOCOL }}://{{ HOST }}/ltpapplications/validate.php?no={{ ltp.no }}";
-        new QRCode(document.getElementById("qrcode"), url);
-    </script>
 </body>
 
 </html>

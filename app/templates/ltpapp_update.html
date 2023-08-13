@@ -118,7 +118,7 @@
             </div>
             {% endif %}
 
-            {% if item.status != 'RELEASED' %}
+            {% if item.status not in ['RELEASED', 'USED', 'EXPIRED'] %}
             <div class="buttons">
                 {% if item.status == 'DRAFT' and user.id == item.client.id %}
                 <a href="/ltpapplications/delete.php?id{{ item.id }}"
@@ -201,7 +201,7 @@
                             View current</a>
                         {% endif %}
                     </div>
-                    {% if item.status != 'RELEASED' %}
+                    {% if item.status not in ['RELEASED', 'USED', 'EXPIRED'] %}
                     <div class="buttons">
                         <input type="submit" class="w3-btn w3-green w3-round-large" name="submit"
                             value="Update Payment">
@@ -299,7 +299,7 @@
         <div class="buttons">
             <a href="/ltpapplications/list.php?page=1"
                 class="w3-btn w3-text-gray w3-round-large w3-border w3-border-gray">Back</a>
-            {% if item.status == 'RELEASED' and item.client.id == user.id %}
+            {% if item.status in ['RELEASED', 'USED', 'EXPIRED'] and item.client.id == user.id %}
             <a href="/ltpapplications/generate.php?id={{ item.id }}" target="_blank"
                 class="w3-btn w3-green w3-round-large">Download Permit</a>
             {% endif %}
