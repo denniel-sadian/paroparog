@@ -26,6 +26,8 @@ class Status {
     const SUBMITTED = 'SUBMITTED';
     const ACCEPTED = 'ACCEPTED';
     const RELEASED = 'RELEASED';
+    const USED = 'USED';
+    const EXPIRED = 'EXPIRED';
 }
 
 

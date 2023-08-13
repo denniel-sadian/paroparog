@@ -34,5 +34,6 @@ if (isset($_POST['submit'])) {
 
 
 $CONTEXT['tab'] = 'users';
+$CONTEXT['roles'] = UserType::ALL;
 
 echo $twig->render('user_create.html', $CONTEXT);

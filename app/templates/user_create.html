@@ -39,11 +39,9 @@
             <div class="text-box">
                 <span>User Type:</span>
                 <select name="type" id="type">
-                    <option value="CLIENT">CLIENT</option>
-                    <option value="PAYMENT_SIGNATORY">PAYMENT_SIGNATORY</option>
-                    <option value="PERMIT_SIGNATORY">PERMIT SIGNATORY</option>
-                    <option value="RELEASING_PERSONNEL">RELEASING PERSONNEL</option>
-                    <option value="ADMIN">ADMIN</option>
+                    {% for i in roles %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="text-box">
